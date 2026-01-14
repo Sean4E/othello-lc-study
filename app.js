@@ -1,0 +1,861 @@
+// Othello Study Companion - React Application
+// For standalone browser use with React loaded via CDN
+
+const { useState, useEffect, useMemo, useRef } = React;
+
+// SceneCard Component
+function SceneCard({ scene }) {
+  const [viewMode, setViewMode] = useState('modern');
+
+  return (
+    <div className="card scene-card">
+      <div className="scene-header">
+        <div>
+          <span className="scene-number">Act {scene.act}, Scene {scene.scene}</span>
+          <h3 className="card-title">{scene.title}</h3>
+        </div>
+      </div>
+
+      <p className="scene-setting">{scene.setting}</p>
+
+      <div className="summary-toggle">
+        <button
+          className={`toggle-btn ${viewMode === 'modern' ? 'active' : ''}`}
+          onClick={() => setViewMode('modern')}
+        >
+          Modern English
+        </button>
+        <button
+          className={`toggle-btn ${viewMode === 'original' ? 'active' : ''}`}
+          onClick={() => setViewMode('original')}
+        >
+          Original Summary
+        </button>
+      </div>
+
+      <p className="card-text">
+        {viewMode === 'modern' ? scene.modernSummary : scene.summary}
+      </p>
+
+      <div className="key-moments">
+        <div className="key-moments-title">Key Moments</div>
+        {scene.keyMoments.map((moment, i) => (
+          <div key={i} className="moment-item">{moment}</div>
+        ))}
+      </div>
+
+      <div className="analysis-box">
+        <div className="analysis-title">Significance</div>
+        <p style={{fontSize: '0.9rem', color: 'rgba(232, 228, 224, 0.8)'}}>{scene.significance}</p>
+      </div>
+    </div>
+  );
+}
+
+// MAIN APPLICATION COMPONENT
+function OthelloStudyCompanion() {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [selectedTheme, setSelectedTheme] = useState(null);
+  const [selectedScene, setSelectedScene] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [quizMode, setQuizMode] = useState(false);
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
+  const [quizScore, setQuizScore] = useState(0);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [essayTopic, setEssayTopic] = useState('');
+  const [essayPlan, setEssayPlan] = useState(null);
+  const [bookmarkedQuotes, setBookmarkedQuotes] = useState([]);
+  const [activeSceneAct, setActiveSceneAct] = useState(1);
+  const contentRef = useRef(null);
+
+  // Generate quiz questions
+  const generateQuiz = () => {
+    const questions = [];
+
+    // Character questions
+    Object.values(CHARACTERS).forEach(char => {
+      if (char.keyQuotes && char.keyQuotes.length > 0) {
+        const q = char.keyQuotes[Math.floor(Math.random() * char.keyQuotes.length)];
+        questions.push({
+          type: 'quote_speaker',
+          question: `Who says: "${q.quote}"?`,
+          answer: char.name,
+          hint: `Act ${q.act}`
+        });
+      }
+    });
+
+    // Theme questions
+    Object.values(THEMES).forEach(theme => {
+      questions.push({
+        type: 'theme',
+        question: `What theme is represented by the phrase "the green-eyed monster"?`,
+        answer: 'Jealousy',
+        hint: 'Iago warns Othello about this in Act 3'
+      });
+    });
+
+    // Mix and limit
+    const shuffled = questions.sort(() => Math.random() - 0.5).slice(0, 15);
+    setQuizQuestions(shuffled);
+    setCurrentQuizIndex(0);
+    setQuizScore(0);
+    setShowAnswer(false);
+    setQuizMode(true);
+  };
+
+  // Search functionality
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const query = searchQuery.toLowerCase();
+    const results = [];
+
+    // Search quotes
+    KEY_QUOTES.forEach(q => {
+      if (q.quote.toLowerCase().includes(query) ||
+          q.analysis.toLowerCase().includes(query) ||
+          q.speaker.toLowerCase().includes(query)) {
+        results.push({ type: 'quote', data: q });
+      }
+    });
+
+    // Search characters
+    Object.values(CHARACTERS).forEach(char => {
+      if (char.name.toLowerCase().includes(query) ||
+          char.description.toLowerCase().includes(query)) {
+        results.push({ type: 'character', data: char });
+      }
+    });
+
+    // Search themes
+    Object.values(THEMES).forEach(theme => {
+      if (theme.name.toLowerCase().includes(query) ||
+          theme.description.toLowerCase().includes(query)) {
+        results.push({ type: 'theme', data: theme });
+      }
+    });
+
+    // Search scenes
+    SCENES.forEach(scene => {
+      if (scene.title.toLowerCase().includes(query) ||
+          scene.summary.toLowerCase().includes(query) ||
+          scene.modernSummary.toLowerCase().includes(query)) {
+        results.push({ type: 'scene', data: scene });
+      }
+    });
+
+    return results.slice(0, 20);
+  }, [searchQuery]);
+
+  // Essay planner
+  const generateEssayPlan = () => {
+    if (!essayTopic.trim()) return;
+
+    const topic = essayTopic.toLowerCase();
+    const plan = {
+      topic: essayTopic,
+      introduction: [],
+      paragraphs: [],
+      conclusion: [],
+      relevantQuotes: []
+    };
+
+    // Find relevant themes
+    Object.values(THEMES).forEach(theme => {
+      if (topic.includes(theme.name.toLowerCase())) {
+        plan.paragraphs.push({
+          focus: theme.name,
+          points: theme.keyPoints.slice(0, 3),
+          quotes: theme.quotes
+        });
+        plan.relevantQuotes.push(...theme.quotes);
+      }
+    });
+
+    // Find relevant characters
+    Object.values(CHARACTERS).forEach(char => {
+      if (topic.includes(char.name.toLowerCase())) {
+        plan.paragraphs.push({
+          focus: char.name,
+          points: [char.arc, ...char.keyTraits.slice(0, 3).map(t => `${char.name} is ${t.toLowerCase()}`)],
+          quotes: char.keyQuotes || []
+        });
+        if (char.keyQuotes) {
+          plan.relevantQuotes.push(...char.keyQuotes);
+        }
+      }
+    });
+
+    // Generic structure if no specific match
+    if (plan.paragraphs.length === 0) {
+      plan.paragraphs = [
+        { focus: "Introduction and Context", points: ["Define the topic", "Historical/theatrical context", "Thesis statement"], quotes: [] },
+        { focus: "Main Argument 1", points: ["Key evidence", "Character analysis", "Textual support"], quotes: KEY_QUOTES.slice(0, 2) },
+        { focus: "Main Argument 2", points: ["Develop analysis", "Counter-argument", "Further evidence"], quotes: KEY_QUOTES.slice(2, 4) },
+        { focus: "Conclusion", points: ["Synthesise arguments", "Final insight", "Link to question"], quotes: [] }
+      ];
+      plan.relevantQuotes = KEY_QUOTES.slice(0, 6);
+    }
+
+    plan.introduction = [
+      "Open with a hook related to the topic",
+      "Provide brief context for Othello",
+      "State your thesis clearly",
+      "Outline your main arguments"
+    ];
+
+    plan.conclusion = [
+      "Restate thesis in light of evidence",
+      "Synthesise your main points",
+      "End with broader significance",
+      "Link back to the question"
+    ];
+
+    setEssayPlan(plan);
+  };
+
+  // Toggle bookmark
+  const toggleBookmark = (quote) => {
+    setBookmarkedQuotes(prev => {
+      const exists = prev.find(q => q.quote === quote.quote);
+      if (exists) {
+        return prev.filter(q => q.quote !== quote.quote);
+      }
+      return [...prev, quote];
+    });
+  };
+
+  const isBookmarked = (quote) => {
+    return bookmarkedQuotes.some(q => q.quote === quote.quote);
+  };
+
+  // Navigation tabs
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: '📖' },
+    { id: 'scenes', label: 'Full Play', icon: '🎭' },
+    { id: 'characters', label: 'Characters', icon: '👥' },
+    { id: 'themes', label: 'Themes', icon: '💡' },
+    { id: 'quotes', label: 'Key Quotes', icon: '💬' },
+    { id: 'techniques', label: 'Techniques', icon: '🎨' },
+    { id: 'exams', label: 'Past Papers', icon: '📝' },
+    { id: 'essay', label: 'Essay Planner', icon: '✍️' },
+    { id: 'quiz', label: 'Quiz', icon: '🎯' },
+    { id: 'bookmarks', label: 'Bookmarks', icon: '⭐' }
+  ];
+
+  return (
+    <div className="app-container">
+      {/* Header */}
+      <header className="header">
+        <div className="header-content">
+          <div className="title-section">
+            <div>
+              <h1 className="main-title">Othello</h1>
+              <p className="subtitle">Leaving Certificate Complete Study Companion</p>
+            </div>
+            <div className="search-container">
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search quotes, characters, themes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchResults.length > 0 && searchQuery && (
+                <div className="search-results">
+                  {searchResults.map((result, i) => (
+                    <div
+                      key={i}
+                      className="search-result-item"
+                      onClick={() => {
+                        if (result.type === 'character') {
+                          setSelectedCharacter(result.data);
+                          setActiveTab('characters');
+                        } else if (result.type === 'theme') {
+                          setSelectedTheme(result.data);
+                          setActiveTab('themes');
+                        } else if (result.type === 'quote') {
+                          setActiveTab('quotes');
+                        } else if (result.type === 'scene') {
+                          setActiveSceneAct(result.data.act);
+                          setActiveTab('scenes');
+                        }
+                        setSearchQuery('');
+                      }}
+                    >
+                      <div className="search-result-type">{result.type}</div>
+                      <div className="search-result-title">
+                        {result.type === 'quote' ? `"${result.data.quote.substring(0, 50)}..."` :
+                         result.type === 'scene' ? `Act ${result.data.act} Scene ${result.data.scene}` :
+                         result.data.name}
+                      </div>
+                      <div className="search-result-preview">
+                        {result.type === 'quote' ? result.data.speaker :
+                         result.type === 'scene' ? result.data.title :
+                         result.data.description?.substring(0, 80) + '...'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <nav className="nav-tabs">
+            {tabs.map(tab => (
+              <button
+                key={tab.id}
+                className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setQuizMode(false);
+                }}
+              >
+                <span>{tab.icon}</span>
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="main-content" ref={contentRef}>
+
+        {/* Overview Tab */}
+        {activeTab === 'overview' && (
+          <div className="content-section">
+            <h2 className="section-title">Study Overview</h2>
+
+            <div className="overview-stats">
+              <div className="stat-card">
+                <div className="stat-number">5</div>
+                <div className="stat-label">Acts</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">15</div>
+                <div className="stat-label">Scenes</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">8</div>
+                <div className="stat-label">Main Characters</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">7</div>
+                <div className="stat-label">Key Themes</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">22</div>
+                <div className="stat-label">Key Quotes</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">10</div>
+                <div className="stat-label">Past Papers</div>
+              </div>
+            </div>
+
+            <div className="card">
+              <h3 className="card-title">The Tragedy of Othello, The Moor of Venice</h3>
+              <div className="card-text overview-intro">
+                <p style={{marginBottom: '1rem'}}>
+                  <strong>Othello</strong> is one of Shakespeare's greatest tragedies, written around 1603-1604. It tells the story of a noble Moorish general in the Venetian army whose life is destroyed by his ensign Iago's manipulation. The play explores jealousy, race, love, betrayal, and the devastating consequences of trusting the wrong people.
+                </p>
+                <p style={{marginBottom: '1rem'}}>
+                  For the <strong>Leaving Certificate</strong>, you need to understand the play's characters, themes, dramatic techniques, and be able to write analytical essays responding to past paper questions. This study companion contains everything you need: scene-by-scene summaries with modern translations, character analysis, theme exploration, key quotes with detailed analysis, and past exam questions.
+                </p>
+                <p>
+                  <strong>Exam Tip:</strong> The most common question types focus on character analysis (especially Othello and Iago), thematic exploration (jealousy, appearance vs reality), and evaluation questions asking you to agree or disagree with a critical statement about the play.
+                </p>
+              </div>
+            </div>
+
+            <div className="context-grid">
+              {Object.values(CONTEXT).map((ctx, i) => (
+                <div key={i} className="context-card">
+                  <h4 className="context-title">{ctx.title}</h4>
+                  {ctx.points.map((point, j) => (
+                    <div key={j} className="context-point">{point}</div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Scenes Tab */}
+        {activeTab === 'scenes' && (
+          <div className="content-section">
+            <h2 className="section-title">Full Play: Scene by Scene</h2>
+
+            <div className="scene-nav">
+              {[1, 2, 3, 4, 5].map(act => (
+                <button
+                  key={act}
+                  className={`act-btn ${activeSceneAct === act ? 'active' : ''}`}
+                  onClick={() => setActiveSceneAct(act)}
+                >
+                  Act {act}
+                </button>
+              ))}
+            </div>
+
+            {SCENES.filter(s => s.act === activeSceneAct).map((scene, i) => (
+              <SceneCard key={i} scene={scene} />
+            ))}
+          </div>
+        )}
+
+        {/* Characters Tab */}
+        {activeTab === 'characters' && (
+          <div className="content-section">
+            <h2 className="section-title">Character Analysis</h2>
+            <div className="grid-2">
+              {Object.values(CHARACTERS).map((char, i) => (
+                <div
+                  key={i}
+                  className="card character-card"
+                  onClick={() => setSelectedCharacter(char)}
+                >
+                  <span className="role-badge">{char.role}</span>
+                  <h3 className="card-title">{char.name}</h3>
+                  {char.title && <p className="card-subtitle">{char.title}</p>}
+                  <p className="card-text">{char.description.substring(0, 200)}...</p>
+                  <div className="traits-list">
+                    {char.keyTraits?.slice(0, 4).map((trait, j) => (
+                      <span key={j} className="trait-tag">{trait}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Themes Tab */}
+        {activeTab === 'themes' && (
+          <div className="content-section">
+            <h2 className="section-title">Themes & Motifs</h2>
+            <div className="grid-2">
+              {Object.values(THEMES).map((theme, i) => (
+                <div
+                  key={i}
+                  className="card"
+                  onClick={() => setSelectedTheme(theme)}
+                  style={{cursor: 'pointer'}}
+                >
+                  <h3 className="card-title">{theme.name}</h3>
+                  <p className="card-subtitle">{theme.subtitle}</p>
+                  <p className="card-text">{theme.description}</p>
+                  <div className="analysis-box">
+                    <div className="analysis-title">Exam Tip</div>
+                    <p style={{fontSize: '0.9rem', color: 'rgba(232, 228, 224, 0.75)'}}>{theme.examTip}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Quotes Tab */}
+        {activeTab === 'quotes' && (
+          <div className="content-section">
+            <h2 className="section-title">Key Quotes & Analysis</h2>
+            {KEY_QUOTES.map((quote, i) => (
+              <div key={i} className="card quote-card">
+                <button
+                  className={`bookmark-btn ${isBookmarked(quote) ? 'active' : ''}`}
+                  onClick={() => toggleBookmark(quote)}
+                >
+                  {isBookmarked(quote) ? '⭐' : '☆'}
+                </button>
+                <p className="quote-text">"{quote.quote}"</p>
+                <div className="quote-meta">
+                  <span className="quote-speaker">{quote.speaker}</span>
+                  <span className="quote-act">Act {quote.act}</span>
+                  <span className="quote-theme">{quote.theme}</span>
+                </div>
+                <div className="analysis-box">
+                  <div className="analysis-title">Analysis</div>
+                  <p style={{fontSize: '0.95rem', color: 'rgba(232, 228, 224, 0.85)'}}>{quote.analysis}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Techniques Tab */}
+        {activeTab === 'techniques' && (
+          <div className="content-section">
+            <h2 className="section-title">Literary & Dramatic Techniques</h2>
+            {LITERARY_TECHNIQUES.map((tech, i) => (
+              <div key={i} className="technique-card">
+                <h3 className="technique-name">{tech.name}</h3>
+                <p className="technique-def">{tech.definition}</p>
+                <div className="technique-examples">
+                  <div className="analysis-title" style={{marginBottom: '0.5rem'}}>Examples in Othello</div>
+                  {tech.examples.map((ex, j) => (
+                    <div key={j} className="technique-example">{ex}</div>
+                  ))}
+                </div>
+                <div className="technique-sig">
+                  <strong>Significance: </strong>{tech.significance}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Past Papers Tab */}
+        {activeTab === 'exams' && (
+          <div className="content-section">
+            <h2 className="section-title">Past Exam Questions (2015-2023)</h2>
+            {PAST_EXAM_QUESTIONS.map((exam, i) => (
+              <div key={i} className="card exam-card">
+                <span className="exam-year">{exam.year}</span>
+                <span className="exam-type">{exam.type}</span>
+                <p className="exam-question">{exam.question}</p>
+                <div className="exam-hints">
+                  <div className="hints-title">Approach Hints</div>
+                  <p style={{fontSize: '0.9rem', color: 'rgba(232, 228, 224, 0.8)'}}>{exam.hints}</p>
+                  <div className="focus-tags">
+                    {exam.focus.map((tag, j) => (
+                      <span key={j} className="focus-tag">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Essay Planner Tab */}
+        {activeTab === 'essay' && (
+          <div className="content-section">
+            <h2 className="section-title">Essay Planner</h2>
+            <div className="essay-planner">
+              <div className="essay-input-section">
+                <div className="card">
+                  <h3 className="card-title">Enter Your Essay Question</h3>
+                  <p className="card-text" style={{marginBottom: '1rem'}}>
+                    Paste a past paper question or write your own topic to generate a structured essay plan with relevant quotes.
+                  </p>
+                  <textarea
+                    className="essay-textarea"
+                    placeholder='"Othello is not truly noble, but deeply flawed from the beginning." Discuss.'
+                    value={essayTopic}
+                    onChange={(e) => setEssayTopic(e.target.value)}
+                  />
+                  <button className="generate-btn" onClick={generateEssayPlan}>
+                    Generate Essay Plan
+                  </button>
+                </div>
+              </div>
+
+              <div className="essay-output">
+                {essayPlan ? (
+                  <div className="essay-plan">
+                    <div className="card">
+                      <h3 className="card-title">Essay Plan: {essayPlan.topic}</h3>
+
+                      <div className="plan-section">
+                        <h4 className="plan-section-title">Introduction</h4>
+                        {essayPlan.introduction.map((point, i) => (
+                          <div key={i} className="plan-item">{point}</div>
+                        ))}
+                      </div>
+
+                      {essayPlan.paragraphs.map((para, i) => (
+                        <div key={i} className="plan-section">
+                          <h4 className="plan-section-title">Paragraph {i + 1}: {para.focus}</h4>
+                          {para.points.map((point, j) => (
+                            <div key={j} className="plan-item">{point}</div>
+                          ))}
+                          {para.quotes.length > 0 && (
+                            <div className="analysis-box" style={{marginTop: '0.75rem'}}>
+                              <div className="analysis-title">Suggested Quotes</div>
+                              {para.quotes.slice(0, 2).map((q, k) => (
+                                <p key={k} style={{marginBottom: '0.5rem', fontSize: '0.9rem'}}>
+                                  "{q.quote}" - {q.speaker || 'N/A'}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+
+                      <div className="plan-section">
+                        <h4 className="plan-section-title">Conclusion</h4>
+                        {essayPlan.conclusion.map((point, i) => (
+                          <div key={i} className="plan-item">{point}</div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="card">
+                      <h3 className="card-title">All Relevant Quotes</h3>
+                      {essayPlan.relevantQuotes.slice(0, 8).map((q, i) => (
+                        <div key={i} style={{marginBottom: '1rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(212, 175, 55, 0.1)'}}>
+                          <p className="quote-text" style={{fontSize: '1rem'}}>"{q.quote}"</p>
+                          <p style={{color: '#d4af37', fontSize: '0.9rem'}}>
+                            - {q.speaker || 'N/A'}, Act {q.act}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="empty-state">
+                    <div className="empty-icon">✍️</div>
+                    <p>Enter an essay question to generate a structured plan</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Quiz Tab */}
+        {activeTab === 'quiz' && (
+          <div className="content-section">
+            <h2 className="section-title">Test Your Knowledge</h2>
+
+            {!quizMode ? (
+              <div className="card" style={{textAlign: 'center', padding: '3rem'}}>
+                <h3 className="card-title">Ready to Test Yourself?</h3>
+                <p className="card-text" style={{marginBottom: '2rem'}}>
+                  Take a quiz on quotes, characters, themes, and key moments from Othello.
+                  Questions are randomised each time!
+                </p>
+                <button className="start-quiz-btn" onClick={generateQuiz}>
+                  Start Quiz (15 Questions)
+                </button>
+              </div>
+            ) : (
+              <div className="quiz-container">
+                {currentQuizIndex < quizQuestions.length ? (
+                  <>
+                    <div className="quiz-progress">
+                      <span>Question {currentQuizIndex + 1}/{quizQuestions.length}</span>
+                      <div className="progress-bar">
+                        <div
+                          className="progress-fill"
+                          style={{width: `${((currentQuizIndex + 1) / quizQuestions.length) * 100}%`}}
+                        />
+                      </div>
+                      <span className="quiz-score">Score: {quizScore}</span>
+                    </div>
+
+                    <div className="card">
+                      <p className="quiz-question">{quizQuestions[currentQuizIndex].question}</p>
+                      <p className="quiz-hint">Hint: {quizQuestions[currentQuizIndex].hint}</p>
+
+                      {showAnswer && (
+                        <div className="quiz-answer">
+                          <div className="answer-label">Answer</div>
+                          <div className="answer-text">{quizQuestions[currentQuizIndex].answer}</div>
+                        </div>
+                      )}
+
+                      <div className="quiz-buttons">
+                        {!showAnswer ? (
+                          <button className="quiz-btn reveal" onClick={() => setShowAnswer(true)}>
+                            Reveal Answer
+                          </button>
+                        ) : (
+                          <>
+                            <button
+                              className="quiz-btn correct"
+                              onClick={() => {
+                                setQuizScore(prev => prev + 1);
+                                setShowAnswer(false);
+                                setCurrentQuizIndex(prev => prev + 1);
+                              }}
+                            >
+                              I Got It Right ✓
+                            </button>
+                            <button
+                              className="quiz-btn incorrect"
+                              onClick={() => {
+                                setShowAnswer(false);
+                                setCurrentQuizIndex(prev => prev + 1);
+                              }}
+                            >
+                              I Got It Wrong ✗
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="card" style={{textAlign: 'center', padding: '3rem'}}>
+                    <h3 className="card-title">Quiz Complete!</h3>
+                    <div className="stat-number" style={{margin: '1.5rem 0'}}>
+                      {quizScore}/{quizQuestions.length}
+                    </div>
+                    <p className="card-text" style={{marginBottom: '2rem'}}>
+                      {quizScore >= 12 ? "Excellent! You really know your Othello!" :
+                       quizScore >= 8 ? "Good work! Keep reviewing the material." :
+                       "Keep studying! Review the characters and quotes."}
+                    </p>
+                    <button className="start-quiz-btn" onClick={generateQuiz}>
+                      Try Again
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Bookmarks Tab */}
+        {activeTab === 'bookmarks' && (
+          <div className="content-section">
+            <h2 className="section-title">Your Bookmarked Quotes</h2>
+            {bookmarkedQuotes.length > 0 ? (
+              bookmarkedQuotes.map((quote, i) => (
+                <div key={i} className="card quote-card">
+                  <button
+                    className="bookmark-btn active"
+                    onClick={() => toggleBookmark(quote)}
+                  >
+                    ⭐
+                  </button>
+                  <p className="quote-text">"{quote.quote}"</p>
+                  <div className="quote-meta">
+                    <span className="quote-speaker">{quote.speaker}</span>
+                    <span className="quote-act">Act {quote.act}</span>
+                    <span className="quote-theme">{quote.theme}</span>
+                  </div>
+                  <div className="analysis-box">
+                    <div className="analysis-title">Analysis</div>
+                    <p style={{fontSize: '0.95rem', color: 'rgba(232, 228, 224, 0.85)'}}>{quote.analysis}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="empty-state">
+                <div className="empty-icon">⭐</div>
+                <p>No bookmarked quotes yet</p>
+                <p style={{fontSize: '0.9rem', marginTop: '0.5rem'}}>
+                  Click the star icon on any quote to bookmark it for quick reference
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </main>
+
+      {/* Character Detail Modal */}
+      {selectedCharacter && (
+        <div className="modal-overlay" onClick={() => setSelectedCharacter(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setSelectedCharacter(null)}>×</button>
+
+            <span className="role-badge">{selectedCharacter.role}</span>
+            <h2 className="card-title" style={{fontSize: '2rem', marginTop: '0.5rem'}}>{selectedCharacter.name}</h2>
+            {selectedCharacter.title && <p className="card-subtitle" style={{fontSize: '1.1rem'}}>{selectedCharacter.title}</p>}
+
+            <div className="detail-section">
+              <p className="card-text">{selectedCharacter.description}</p>
+            </div>
+
+            {selectedCharacter.arc && (
+              <div className="detail-section">
+                <h4 className="detail-title">Character Arc</h4>
+                <p className="card-text">{selectedCharacter.arc}</p>
+              </div>
+            )}
+
+            <div className="detail-section">
+              <h4 className="detail-title">Key Traits</h4>
+              <div className="traits-list">
+                {selectedCharacter.keyTraits?.map((trait, j) => (
+                  <span key={j} className="trait-tag">{trait}</span>
+                ))}
+              </div>
+            </div>
+
+            {selectedCharacter.relationships && (
+              <div className="detail-section">
+                <h4 className="detail-title">Relationships</h4>
+                {Object.entries(selectedCharacter.relationships).map(([name, desc], j) => (
+                  <div key={j} className="relationship-item">
+                    <span className="relationship-name" style={{textTransform: 'capitalize'}}>{name}: </span>
+                    <span style={{color: 'rgba(232, 228, 224, 0.8)'}}>{desc}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {selectedCharacter.keyQuotes && (
+              <div className="detail-section">
+                <h4 className="detail-title">Key Quotes</h4>
+                {selectedCharacter.keyQuotes.map((q, j) => (
+                  <div key={j} className="card quote-card" style={{marginBottom: '0.75rem'}}>
+                    <p className="quote-text" style={{fontSize: '1rem'}}>"{q.quote}"</p>
+                    <p style={{color: 'rgba(212, 175, 55, 0.7)', fontSize: '0.85rem'}}>Act {q.act}</p>
+                    <p style={{fontSize: '0.9rem', color: 'rgba(232, 228, 224, 0.75)', marginTop: '0.5rem'}}>{q.analysis}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {selectedCharacter.examFocus && (
+              <div className="analysis-box">
+                <div className="analysis-title">Exam Focus</div>
+                <p style={{color: 'rgba(232, 228, 224, 0.85)'}}>{selectedCharacter.examFocus}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Theme Detail Modal */}
+      {selectedTheme && (
+        <div className="modal-overlay" onClick={() => setSelectedTheme(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setSelectedTheme(null)}>×</button>
+
+            <h2 className="card-title" style={{fontSize: '2rem'}}>{selectedTheme.name}</h2>
+            <p className="card-subtitle" style={{fontSize: '1.1rem'}}>{selectedTheme.subtitle}</p>
+
+            <div className="detail-section">
+              <p className="card-text">{selectedTheme.description}</p>
+            </div>
+
+            <div className="detail-section">
+              <h4 className="detail-title">Key Points</h4>
+              {selectedTheme.keyPoints.map((point, j) => (
+                <div key={j} className="plan-item">{point}</div>
+              ))}
+            </div>
+
+            <div className="detail-section">
+              <h4 className="detail-title">Key Quotes</h4>
+              {selectedTheme.quotes.map((q, j) => (
+                <div key={j} className="card quote-card" style={{marginBottom: '0.75rem'}}>
+                  <p className="quote-text" style={{fontSize: '1rem'}}>"{q.quote}"</p>
+                  <div className="quote-meta">
+                    <span className="quote-speaker">{q.speaker}</span>
+                    <span className="quote-act">Act {q.act}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="analysis-box">
+              <div className="analysis-title">Exam Tip</div>
+              <p style={{color: 'rgba(232, 228, 224, 0.85)'}}>{selectedTheme.examTip}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Render the application
+ReactDOM.createRoot(document.getElementById('root')).render(<OthelloStudyCompanion />);
