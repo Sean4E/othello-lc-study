@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Othello - Leaving Certificate Study Companion</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Crimson Pro', Georgia, serif; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useMemo, useRef } = React;
+
+    // ============================================
+    // OTHELLO LEAVING CERTIFICATE STUDY COMPANION
+    // ============================================
+
+    const CHARACTERS = {
+      othello: {
+        name: "Othello",
+        title: "The Moor of Venice",
+        role: "Tragic Hero / Protagonist",
+        description: "A Moorish general in the Venetian army, Othello is a noble and accomplished military leader who falls victim to Iago's manipulation. His outsider status makes him vulnerable to insecurities about his place in Venetian society and his marriage to Desdemona.",
+        keyTraits: ["Noble", "Trusting", "Passionate", "Insecure", "Jealous (when manipulated)", "Eloquent", "Proud"],
+        arc: "Othello transforms from a confident, dignified commander to a jealous, irrational murderer. His tragic flaw (hamartia) is his trusting nature and deep-seated insecurity about his race and age.",
+        relationships: {
+          desdemona: "Wife - loves her deeply but becomes convinced of her infidelity",
+          iago: "Ensign - trusts him completely, calls him 'honest Iago'",
+          cassio: "Lieutenant - valued soldier whom he demotes and later believes is Desdemona's lover",
+          brabantio: "Father-in-law - never accepted by him"
+        },
+        keyQuotes: [
+          { quote: "She loved me for the dangers I had passed, And I loved her that she did pity them.", act: "1.3", analysis: "Reveals how their love was built on storytelling and mutual admiration" },
+          { quote: "Rude am I in my speech, And little blessed with the soft phrase of peace", act: "1.3", analysis: "Shows his perceived outsider status despite his obvious eloquence" },
+          { quote: "O, beware, my lord, of jealousy! It is the green-eyed monster which doth mock the meat it feeds on.", act: "3.3", analysis: "Iago's warning ironically plants the seed of jealousy" },
+          { quote: "Her honour is an essence that was not seen; They have it very oft that have it not.", act: "4.1", analysis: "Shows his descent into paranoid reasoning" },
+          { quote: "It is the cause, it is the cause, my soul. Let me not name it to you, you chaste stars!", act: "5.2", analysis: "His self-deception - sees murder as justice, not crime" },
+          { quote: "Of one that loved not wisely, but too well", act: "5.2", analysis: "His final self-assessment - partially true but also self-justifying" }
+        ],
+        examFocus: "Examiners often ask about Othello's nobility, his transformation, and whether he is truly a tragic hero. Consider his race, his eloquence, and his vulnerability."
+      },
+      iago: {
+        name: "Iago",
+        title: "The Villain",
+        role: "Antagonist",
+        description: "Othello's ensign (standard-bearer), Iago is one of Shakespeare's most complex villains. Passed over for promotion in favour of Cassio, he plots revenge against Othello through manipulation and deception. His motives are multiple and perhaps ultimately unknowable.",
+        keyTraits: ["Manipulative", "Intelligent", "Amoral", "Jealous", "Misogynistic", "Two-faced", "Patient"],
+        arc: "Iago remains essentially unchanged throughout - he is evil from start to finish. His arc is one of executing his plan methodically until his exposure.",
+        relationships: {
+          othello: "Master - hates him, possibly for racial reasons, definitely for the promotion",
+          emilia: "Wife - uses and discards her, shows no love",
+          cassio: "Rival - jealous of his promotion, uses him as tool",
+          roderigo: "Dupe - exploits his love for Desdemona for money and assistance",
+          desdemona: "Target - innocent victim he destroys to hurt Othello"
+        },
+        keyQuotes: [
+          { quote: "I am not what I am", act: "1.1", analysis: "His fundamental duplicity - a reverse of God's 'I am what I am'" },
+          { quote: "I hate the Moor... it is thought abroad that 'twixt my sheets He has done my office", act: "1.3", analysis: "Multiple motives - professional jealousy and sexual paranoia" },
+          { quote: "Put money in thy purse", act: "1.3", analysis: "Repeated cynically to Roderigo - shows his mercenary nature" },
+          { quote: "The Moor is of a free and open nature, That thinks men honest that but seem to be so", act: "1.3", analysis: "His calculated assessment of Othello's weakness" },
+          { quote: "O, you are well tuned now! But I'll set down the pegs that make this music", act: "2.1", analysis: "Musical metaphor shows his intention to destroy the harmony of their love" },
+          { quote: "Demand me nothing. What you know, you know. From this time forth I never will speak word.", act: "5.2", analysis: "His final silence - refuses to explain, maintaining power even in defeat" }
+        ],
+        examFocus: "Examiners frequently ask about Iago's motivation (or lack thereof), his dramatic function, and his relationship with the audience through soliloquies."
+      },
+      desdemona: {
+        name: "Desdemona",
+        title: "The Innocent",
+        role: "Victim / Love Interest",
+        description: "A Venetian noblewoman who defies her father to marry Othello. Desdemona represents purity and devoted love, but her very virtues - her kindness, her advocacy for Cassio - are twisted by Iago into evidence of guilt.",
+        keyTraits: ["Loving", "Loyal", "Innocent", "Courageous", "Naive", "Forgiving"],
+        arc: "Desdemona begins as an assertive woman who defies convention, but becomes increasingly passive as Othello's jealousy grows. Her final moments show her continued love even as Othello kills her.",
+        relationships: {
+          othello: "Husband - loves him unconditionally despite his abuse",
+          emilia: "Attendant and friend - confides in her",
+          cassio: "Friend - advocates for his reinstatement (innocently)",
+          brabantio: "Father - defies him to marry Othello"
+        },
+        keyQuotes: [
+          { quote: "My noble father, I do perceive here a divided duty", act: "1.3", analysis: "Shows her intelligence and diplomatic skill in a difficult situation" },
+          { quote: "I saw Othello's visage in his mind", act: "1.3", analysis: "She loves him for who he is, not despite his race" },
+          { quote: "His unkindness may defeat my life, But never taint my love.", act: "4.2", analysis: "Her absolute devotion, even when he treats her cruelly" },
+          { quote: "Commend me to my kind lord", act: "5.2", analysis: "Her dying words still express love for Othello" },
+          { quote: "Nobody; I myself. Farewell.", act: "5.2", analysis: "She lies to protect Othello even as she dies" }
+        ],
+        examFocus: "Examiners ask whether Desdemona is a passive victim or an active agent. Consider her defiance of her father versus her later passivity."
+      },
+      emilia: {
+        name: "Emilia",
+        title: "The Truth-Teller",
+        role: "Attendant / Catalyst",
+        description: "Iago's wife and Desdemona's attendant. Emilia is practical, worldly-wise, and ultimately heroic. She unknowingly aids Iago's plot by giving him the handkerchief, but redeems herself by exposing him.",
+        keyTraits: ["Practical", "Loyal", "Brave", "Outspoken", "Proto-feminist"],
+        arc: "Emilia moves from unwitting accomplice to heroic truth-teller. Her character grows in moral stature throughout the play.",
+        relationships: {
+          iago: "Husband - desperately wants his approval, eventually exposes him",
+          desdemona: "Mistress and friend - deeply devoted to her",
+          othello: "Master - ultimately defies him to tell the truth"
+        },
+        keyQuotes: [
+          { quote: "Who would not make her husband a cuckold to make him a monarch?", act: "4.3", analysis: "Her pragmatic view of marriage and fidelity" },
+          { quote: "Let husbands know Their wives have sense like them", act: "4.3", analysis: "Early feminist argument for women's equality" },
+          { quote: "I will not charm my tongue; I am bound to speak", act: "5.2", analysis: "Her moment of courage - chooses truth over safety" },
+          { quote: "Moor, she was chaste. She loved thee, cruel Moor", act: "5.2", analysis: "Her final vindication of Desdemona" }
+        ],
+        examFocus: "Emilia is often discussed in terms of her proto-feminist speeches and her moral growth. Compare her to Desdemona."
+      },
+      cassio: {
+        name: "Cassio",
+        title: "The Lieutenant",
+        role: "Unwitting Tool",
+        description: "A Florentine soldier and Othello's newly promoted lieutenant. Cassio is handsome, well-mannered, and inexperienced in battle - everything Iago resents. He is used by Iago as the supposed lover in the adultery plot.",
+        keyTraits: ["Courteous", "Inexperienced", "Handsome", "Honourable", "Weak (for drink)"],
+        arc: "Cassio falls from grace through his weakness for alcohol, then is unknowingly used in Iago's plot, and finally survives to inherit Othello's position.",
+        relationships: {
+          othello: "Commander - deeply respects him, devastated to lose his favour",
+          iago: "Fellow officer - trusts him, unaware of his hatred",
+          desdemona: "Friend - asks her to intercede for him (innocently)",
+          bianca: "Lover - casual relationship Iago uses as evidence"
+        },
+        keyQuotes: [
+          { quote: "Reputation, reputation, reputation! O, I have lost my reputation!", act: "2.3", analysis: "His obsession with honour - ironic given what's to come" },
+          { quote: "I have very poor and unhappy brains for drinking", act: "2.3", analysis: "His weakness that Iago exploits" },
+          { quote: "I never gave her aught", act: "5.2", analysis: "His simple denial exposes Iago's lies" }
+        ],
+        examFocus: "Cassio is often discussed as a foil to Othello - what Othello is not. His role in the handkerchief plot is central to the tragedy."
+      },
+      roderigo: {
+        name: "Roderigo",
+        title: "The Dupe",
+        role: "Comic/Pathetic Figure",
+        description: "A wealthy Venetian gentleman who is desperately in love with Desdemona. He is easily manipulated by Iago, who takes his money and uses him as a tool in his schemes.",
+        keyTraits: ["Naive", "Wealthy", "Lovesick", "Gullible", "Persistent"],
+        arc: "Roderigo is manipulated throughout, finally realising too late that Iago has used him, before being killed by him.",
+        relationships: {
+          iago: "Supposed friend - actually his manipulator and eventual murderer",
+          desdemona: "Object of obsession - never returns his feelings",
+          cassio: "Rival - attacks him on Iago's orders"
+        },
+        keyQuotes: [
+          { quote: "I will incontinently drown myself", act: "1.3", analysis: "His melodramatic despair, easily manipulated by Iago" },
+          { quote: "I have no great devotion to the deed; And yet he hath given me satisfying reasons", act: "5.1", analysis: "Shows how Iago's manipulation overcomes his better judgment" }
+        ],
+        examFocus: "Roderigo provides comic relief but also shows Iago's manipulative skills in action."
+      },
+      brabantio: {
+        name: "Brabantio",
+        title: "The Father",
+        role: "Voice of Prejudice",
+        description: "Desdemona's father, a Venetian senator. He is outraged by her marriage to Othello and accuses the Moor of witchcraft. His rejection of the marriage represents Venetian racial prejudice.",
+        keyTraits: ["Loving (to Desdemona)", "Prejudiced", "Proud", "Conventional"],
+        keyQuotes: [
+          { quote: "Look to her, Moor, if thou hast eyes to see: She has deceived her father, and may thee.", act: "1.3", analysis: "His warning plants a seed that Iago later exploits" },
+          { quote: "Against all rules of nature", act: "1.3", analysis: "His view of interracial marriage" }
+        ],
+        examFocus: "Brabantio represents societal prejudice and his warning about deception is ironically pivotal."
+      },
+      bianca: {
+        name: "Bianca",
+        title: "The Courtesan",
+        role: "Plot Device",
+        description: "A courtesan (prostitute) in Cyprus who is in love with Cassio. Her possession of the handkerchief provides the final 'proof' that convinces Othello of Desdemona's guilt.",
+        keyTraits: ["Jealous", "Loving", "Low status", "Passionate"],
+        keyQuotes: [
+          { quote: "Let the devil and his dam haunt you! What did you mean by that same handkerchief you gave me even now?", act: "4.1", analysis: "Her jealousy about the handkerchief drives the plot" }
+        ],
+        examFocus: "Bianca's role in the handkerchief plot - she unknowingly seals Desdemona's fate."
+      }
+    };
+
+    const THEMES = {
+      jealousy: {
+        name: "Jealousy",
+        subtitle: "The Green-Eyed Monster",
+        description: "Jealousy is the play's central theme, described memorably as 'the green-eyed monster which doth mock the meat it feeds on.' Shakespeare shows how jealousy destroys reason and transforms love into murderous rage.",
+        keyPoints: [
+          "Othello's jealousy is manufactured by Iago - it comes from outside, not within",
+          "Iago's jealousy is multi-layered: professional (Cassio's promotion), sexual (suspicions about Emilia), and possibly racial",
+          "The handkerchief becomes a symbol of jealousy - a trivial object given tremendous significance",
+          "Jealousy in the play is specifically male and specifically sexual",
+          "Bianca's jealousy of Cassio mirrors Othello's jealousy of Desdemona"
+        ],
+        quotes: [
+          { quote: "O, beware, my lord, of jealousy! It is the green-eyed monster which doth mock the meat it feeds on", speaker: "Iago", act: "3.3" },
+          { quote: "Trifles light as air Are to the jealous confirmations strong As proofs of holy writ", speaker: "Iago", act: "3.3" },
+          { quote: "I had rather be a toad And live upon the vapour of a dungeon Than keep a corner in the thing I love For others' uses", speaker: "Othello", act: "3.3" }
+        ],
+        examTip: "When writing about jealousy, distinguish between Othello's induced jealousy and Iago's pre-existing jealousy. Consider how Shakespeare presents jealousy as both ridiculous and terrifying."
+      },
+      appearance_reality: {
+        name: "Appearance vs Reality",
+        subtitle: "Honest Iago",
+        description: "The gap between appearance and reality is central to the play. Iago appears honest but is deeply corrupt; Desdemona appears guilty but is innocent; Othello appears to be dispensing justice but commits murder.",
+        keyPoints: [
+          "Iago is called 'honest' over 20 times in the play - dramatic irony",
+          "The handkerchief 'ocular proof' is actually no proof at all",
+          "Venice represents civilisation and order, but conceals prejudice and corruption",
+          "Othello's eloquent speech masks his growing irrationality",
+          "The play questions whether we can ever truly know another person"
+        ],
+        quotes: [
+          { quote: "I am not what I am", speaker: "Iago", act: "1.1" },
+          { quote: "Men should be what they seem; Or those that be not, would they might seem none!", speaker: "Iago", act: "3.3" },
+          { quote: "Her honour is an essence that was not seen", speaker: "Othello", act: "4.1" }
+        ],
+        examTip: "Connect this theme to Iago's manipulation - he exploits Othello's inability to distinguish appearance from reality. The handkerchief is key evidence."
+      },
+      race_outsider: {
+        name: "Race and Otherness",
+        subtitle: "The Moor of Venice",
+        description: "Othello's race makes him an outsider in Venetian society. While Venice values his military service, racial prejudice runs deep. Othello's insecurity about his race makes him vulnerable to Iago's insinuations.",
+        keyPoints: [
+          "The play opens with racist language: 'thick-lips', 'old black ram', 'Barbary horse'",
+          "Brabantio's response to the marriage reveals societal racism",
+          "Othello internalises racism: sees himself through others' prejudiced eyes",
+          "Venice uses Othello but never fully accepts him",
+          "The 'exotic' storytelling that won Desdemona also marks him as 'other'"
+        ],
+        quotes: [
+          { quote: "An old black ram Is tupping your white ewe", speaker: "Iago", act: "1.1" },
+          { quote: "Haply, for I am black And have not those soft parts of conversation That chamberers have", speaker: "Othello", act: "3.3" },
+          { quote: "Her name, that was as fresh As Dian's visage, is now begrimed and black As mine own face", speaker: "Othello", act: "3.3" }
+        ],
+        examTip: "Be nuanced about race - Shakespeare presents both racist characters AND a noble Black protagonist. Consider how Othello's outsider status makes him vulnerable."
+      },
+      love_marriage: {
+        name: "Love and Marriage",
+        subtitle: "She Loved Me for the Dangers",
+        description: "The play examines love and marriage from multiple angles: the passionate love of Othello and Desdemona, the loveless marriage of Iago and Emilia, and the societal context of marriage in Venice.",
+        keyPoints: [
+          "Othello and Desdemona's love is genuine but built on idealisation",
+          "Their love story (dangers, pity) suggests romantic love rather than daily reality",
+          "Iago and Emilia's marriage is transactional and loveless",
+          "The Willow Song represents women's vulnerability in marriage",
+          "Marriage is also property - Desdemona 'belongs' first to her father, then to Othello"
+        ],
+        quotes: [
+          { quote: "She loved me for the dangers I had passed, And I loved her that she did pity them", speaker: "Othello", act: "1.3" },
+          { quote: "I saw Othello's visage in his mind", speaker: "Desdemona", act: "1.3" },
+          { quote: "My life upon her faith!", speaker: "Othello", act: "1.3" }
+        ],
+        examTip: "Examine whether Othello truly knows Desdemona, or has created an idealised version of her. Compare the play's different marriages."
+      },
+      reputation_honour: {
+        name: "Reputation and Honour",
+        subtitle: "Who Steals My Purse",
+        description: "In Othello's world, reputation is everything. The loss of honour - or the appearance of its loss - drives the tragedy. Ironically, Iago dismisses reputation while manipulating others' concern for it.",
+        keyPoints: [
+          "Cassio's despair at losing his reputation drives the early plot",
+          "Othello kills Desdemona to restore his 'honour' as a cuckolded husband",
+          "Iago's reputation as 'honest' is his greatest weapon",
+          "For women, honour means chastity - Desdemona's 'honour' cannot be proven",
+          "Othello's final speech attempts to control his posthumous reputation"
+        ],
+        quotes: [
+          { quote: "Reputation, reputation, reputation! O, I have lost my reputation!", speaker: "Cassio", act: "2.3" },
+          { quote: "Good name in man and woman, dear my lord, Is the immediate jewel of their souls", speaker: "Iago", act: "3.3" },
+          { quote: "Who steals my purse steals trash... But he that filches from me my good name Robs me of that which not enriches him And makes me poor indeed", speaker: "Iago", act: "3.3" }
+        ],
+        examTip: "Note the irony of Iago's famous speech about reputation - he uses others' concern for honour while having none himself."
+      },
+      manipulation: {
+        name: "Manipulation and Deception",
+        subtitle: "I'll Pour This Pestilence",
+        description: "Iago is a master manipulator who understands human psychology perfectly. He tailors his approach to each victim and creates situations where his targets effectively manipulate themselves.",
+        keyPoints: [
+          "Iago exploits each character's weakness: Othello's insecurity, Cassio's weakness for drink, Roderigo's love",
+          "He uses insinuation rather than direct accusation - makes Othello draw his own conclusions",
+          "The temptation scene (3.3) is a masterclass in psychological manipulation",
+          "Iago positions himself as reluctant truth-teller: 'I am not what I would be'",
+          "He manipulates through absence - what he doesn't say is as powerful as what he does"
+        ],
+        quotes: [
+          { quote: "I'll pour this pestilence into his ear", speaker: "Iago", act: "2.3" },
+          { quote: "The Moor already changes with my poison", speaker: "Iago", act: "3.3" },
+          { quote: "Work on, My medicine, work!", speaker: "Iago", act: "4.1" }
+        ],
+        examTip: "Analyse specific techniques Iago uses: rhetorical questions, false reluctance, planted suggestions. The temptation scene is essential material."
+      },
+      women_patriarchy: {
+        name: "Women and Patriarchy",
+        subtitle: "Let Husbands Know",
+        description: "The play presents women as property and victims in a patriarchal society. Desdemona and Emilia offer different responses to male control, while all women ultimately suffer from men's violence and jealousy.",
+        keyPoints: [
+          "Women are passed from father to husband as property",
+          "Desdemona's agency decreases as the play progresses",
+          "Emilia's speech in Act 4 Scene 3 is an early feminist manifesto",
+          "The Willow Song associates female love with death and abandonment",
+          "All the women (Desdemona, Emilia, Bianca) are accused of sexual impropriety",
+          "Male honour depends on female chastity - women carry the burden of proof"
+        ],
+        quotes: [
+          { quote: "Let husbands know Their wives have sense like them", speaker: "Emilia", act: "4.3" },
+          { quote: "Look to your wife; observe her well with Cassio", speaker: "Iago", act: "3.3" },
+          { quote: "She's like a liar gone to burning hell: 'Twas I that killed her", speaker: "Othello", act: "5.2" }
+        ],
+        examTip: "Compare Desdemona and Emilia's views on women and marriage. Emilia's Act 4 Scene 3 speech is excellent material for essays on this theme."
+      }
+    };
+
+    const SCENES = [
+      { act: 1, scene: 1, title: "A Street in Venice", setting: "Night. A street in Venice.",
+        summary: "Iago reveals to Roderigo that he hates Othello for promoting Cassio over him. Together, they wake Brabantio to tell him his daughter Desdemona has eloped with Othello. Brabantio is outraged and sets out to confront Othello.",
+        modernSummary: "Iago is furious that Othello passed him over for promotion and gave the job to Cassio. He tells his money-source Roderigo about his plan to destroy Othello. They wake up Desdemona's father Brabantio with the news that she's secretly married Othello. They use racist and crude imagery to shock him. Brabantio is horrified and goes to find them.",
+        keyMoments: ["Iago's 'I am not what I am' reveals his deceptive nature", "Racist imagery establishes societal prejudice", "Brabantio's reaction shows the obstacles facing the marriage"],
+        significance: "Sets up the themes of deception, jealousy, and racism. Establishes Iago as the villain through his soliloquy." },
+      { act: 1, scene: 2, title: "Before the Sagittary", setting: "Before the Sagittary inn.",
+        summary: "Iago warns Othello that Brabantio is angry and coming for him. Othello remains calm, confident in his reputation and the legitimacy of his marriage. Cassio arrives to summon Othello to the Duke on urgent military business. Brabantio arrives with armed men, accusing Othello of using witchcraft on Desdemona. They all proceed to the Duke.",
+        modernSummary: "Iago pretends to warn Othello that Brabantio is coming with armed men. Othello isn't worried - he's confident in his service to Venice and his love for Desdemona. Cassio arrives with urgent news: the Duke needs Othello immediately about a military crisis in Cyprus. Brabantio shows up accusing Othello of using magic to seduce his daughter. They all go to see the Duke.",
+        keyMoments: ["Othello's dignified response contrasts with Act 1's racist imagery", "First presentation of Othello's nobility and eloquence", "Military crisis in Cyprus sets up the change of location"],
+        significance: "Establishes Othello as noble and dignified. The contrast with the racist descriptions in Scene 1 is stark." },
+      { act: 1, scene: 3, title: "A Council Chamber", setting: "The Duke's council chamber.",
+        summary: "The Duke and senators discuss the Turkish threat to Cyprus. Brabantio accuses Othello of witchcraft. Othello eloquently defends himself and explains how he won Desdemona's love through storytelling. Desdemona arrives and confirms she married Othello of her own free will. Othello is sent to Cyprus to fight the Turks. In soliloquy, Iago reveals his plan to use Cassio against Othello.",
+        modernSummary: "The Venetian government is dealing with a Turkish invasion fleet heading for Cyprus. Brabantio accuses Othello of using magic to make Desdemona love him. Othello gives a beautiful speech about how he won her with stories of his adventures. Desdemona arrives and publicly declares her love and loyalty to her husband. Brabantio is devastated but defeated. Othello must go to Cyprus immediately. After everyone leaves, Iago plots with Roderigo and then reveals in soliloquy his plan to make Othello think Desdemona is cheating with Cassio.",
+        keyMoments: ["Othello's 'She loved me for the dangers I had passed' speech", "Desdemona's 'divided duty' speech shows her strength", "Brabantio's warning 'Look to her, Moor, if thou hast eyes to see'", "Iago's soliloquy reveals his motivation and plan"],
+        significance: "The senate scene is crucial: we see Othello at his most eloquent and confident. Brabantio's warning will later be twisted by Iago." },
+      { act: 2, scene: 1, title: "A Sea-port in Cyprus", setting: "Cyprus. A sea-port.",
+        summary: "Characters arrive in Cyprus. A storm has destroyed the Turkish fleet. Desdemona arrives first, then Othello. Iago observes Cassio's courtly behavior with Desdemona and plans to use it against him. In soliloquy, Iago outlines his plot.",
+        modernSummary: "Everyone arrives in Cyprus after a terrible storm that conveniently destroyed the Turkish fleet. While waiting for Othello, Iago watches Cassio being polite and charming with Desdemona. He decides to use Cassio's good manners as 'evidence' of an affair. When Othello arrives, he and Desdemona have a beautiful reunion. Iago tells Roderigo that Desdemona will soon tire of Othello and suggests Cassio is her likely next choice. He convinces Roderigo to pick a fight with Cassio that night.",
+        keyMoments: ["The storm symbolises the coming destruction of love", "Iago's observation of Cassio and Desdemona", "Othello's joyful reunion: 'If it were now to die, 'Twere now to be most happy'"],
+        significance: "The shift from Venice to Cyprus moves the characters from civilisation to an isolated military outpost where normal rules don't apply." },
+      { act: 2, scene: 2, title: "A Hall in the Castle", setting: "A hall in the castle.",
+        summary: "A herald announces the celebration of the destruction of the Turkish fleet and Othello's marriage.",
+        modernSummary: "A brief public announcement: everyone should party to celebrate the military victory and Othello's wedding.",
+        keyMoments: ["Sets up the drinking scene to follow"],
+        significance: "Brief transitional scene establishing the celebration context." },
+      { act: 2, scene: 3, title: "A Hall in the Castle", setting: "The hall. Night.",
+        summary: "Iago gets Cassio drunk despite his protests that he can't handle alcohol. Roderigo provokes Cassio into a fight, which escalates. Othello arrives and dismisses Cassio from his position. Iago suggests Cassio ask Desdemona to plead for his reinstatement.",
+        modernSummary: "Iago insists Cassio drink with him despite Cassio's warnings that he's a lightweight. Once drunk, Cassio gets into a fight with Roderigo and ends up wounding Montano when he tries to intervene. Othello is woken by the commotion and demands to know what happened. Iago pretends to protect Cassio while actually ensuring Othello hears the worst version. Othello fires Cassio. Afterward, Iago 'helpfully' suggests Cassio ask Desdemona to speak to Othello on his behalf - this will allow Iago to frame their meetings as evidence of an affair.",
+        keyMoments: ["Cassio's 'Reputation, reputation!' speech", "Iago's manipulation appears helpful while being destructive", "Cassio is set up to depend on Desdemona"],
+        significance: "This scene initiates the main plot. Cassio's dismissal and his decision to use Desdemona as intermediary provides Iago with his opportunity." },
+      { act: 3, scene: 1, title: "Before the Castle", setting: "Before the castle.",
+        summary: "Cassio arranges with Emilia to meet Desdemona privately.",
+        modernSummary: "Cassio sends musicians to try to please Othello (who doesn't appreciate it). He asks Emilia to arrange a private meeting with Desdemona to discuss his reinstatement.",
+        keyMoments: ["Cassio's 'private' meeting with Desdemona will be twisted by Iago"],
+        significance: "Short scene setting up Cassio's meeting with Desdemona." },
+      { act: 3, scene: 2, title: "A Room in the Castle", setting: "A room in the castle.",
+        summary: "Brief scene: Othello gives letters to Iago to deliver and plans to inspect the fortifications.",
+        modernSummary: "Othello handles military business, giving Iago letters to deliver. He's going to inspect the island's defences.",
+        keyMoments: ["Shows Othello still functioning as a military commander"],
+        significance: "Brief transitional scene." },
+      { act: 3, scene: 3, title: "The Garden of the Castle", setting: "The garden of the castle.",
+        summary: "THE TEMPTATION SCENE. Desdemona promises to help Cassio. Iago begins planting suspicions in Othello's mind through insinuation and reluctant half-statements. Desdemona accidentally drops her handkerchief; Emilia gives it to Iago. By the end, Othello is convinced of Desdemona's infidelity and vows revenge.",
+        modernSummary: "This is the play's crucial scene. Desdemona promises Cassio she'll keep asking Othello until he reinstates him. Iago sees Cassio leaving quickly and says 'I don't like that' - planting the first seed. He then masterfully manipulates Othello through rhetorical questions, pretended reluctance to speak, and dark hints. He warns Othello about jealousy (while creating it), suggests Desdemona might prefer someone 'of her own clime, complexion, and degree', and reminds him of Brabantio's warning about her capacity for deception. Meanwhile, Desdemona drops her handkerchief - the first gift Othello gave her. Emilia picks it up because Iago has been asking for it. Iago takes it and plans to plant it in Cassio's room. By the end of the scene, Othello is tormented and demands 'ocular proof'. Iago fabricates a story about Cassio talking in his sleep about Desdemona and mentions seeing Cassio with her handkerchief. Othello swears vengeance, and they kneel together in a perverse marriage-like bond.",
+        keyMoments: ["'Ha! I like not that' - Iago's opening move", "'I am not what I would be' - pretended reluctance", "'O, beware, my lord, of jealousy!' - creating what he warns against", "The handkerchief changes hands", "'Villain, be sure thou prove my love a whore!' - Othello demands proof", "'Now art thou my lieutenant' - Iago achieves his goal"],
+        significance: "The pivotal scene of the play. Othello transforms from confident husband to jealous monster. Every technique of Iago's manipulation is on display." },
+      { act: 3, scene: 4, title: "Before the Castle", setting: "Before the castle.",
+        summary: "Desdemona tries to speak to Othello about Cassio. Othello asks for her handkerchief and tells her it has magical properties. When she cannot produce it, he becomes angry and leaves. Cassio gives the handkerchief to Bianca.",
+        modernSummary: "Desdemona, unaware of what's happening, tries to talk to Othello about reinstating Cassio. Othello keeps asking about her handkerchief. He tells her it was a family heirloom with magical properties - if she loses it, their love will be destroyed. Desdemona doesn't admit she's lost it, which makes Othello angrier. He storms off. Cassio has found the handkerchief (which Iago planted in his room) and gives it to his girlfriend Bianca to copy the embroidery.",
+        keyMoments: ["Othello's speech about the handkerchief's magical history", "Desdemona's lie about not losing it", "The handkerchief passes to Bianca"],
+        significance: "The handkerchief becomes central evidence. Othello's story about its magical properties shows his exotic background but also his superstitious thinking." },
+      { act: 4, scene: 1, title: "Before the Castle", setting: "Cyprus. Before the castle.",
+        summary: "Othello has an epileptic fit from emotional torment. Iago arranges for Othello to observe Cassio talking about Bianca while thinking they're discussing Desdemona. Bianca returns the handkerchief in front of Othello. Othello decides to kill Desdemona by smothering her in bed.",
+        modernSummary: "Iago keeps tormenting Othello until he has a seizure from emotional overload. When Othello recovers, Iago tells him to hide and watch while he questions Cassio about Desdemona. But Iago actually asks Cassio about Bianca - Cassio laughs dismissively about her, while Othello thinks he's laughing about Desdemona. Then Bianca arrives, angry, and throws the handkerchief at Cassio, which Othello sees. He's now completely convinced. When Lodovico arrives from Venice with orders for Othello to return home, Othello publicly strikes Desdemona. Iago suggests smothering her in the bed she 'contaminated'.",
+        keyMoments: ["Othello's fit shows his complete psychological breakdown", "The eavesdropping scene - dramatic irony at its most painful", "Othello strikes Desdemona publicly", "The decision to smother her in bed"],
+        significance: "Othello reaches his lowest point. The eavesdropping scene shows how context manipulation works - Cassio says nothing about Desdemona, but Othello hears what he expects." },
+      { act: 4, scene: 2, title: "A Room in the Castle", setting: "A room in the castle.",
+        summary: "Othello accuses Desdemona of being a whore. She protests her innocence but cannot understand what's happening. Emilia defends her mistress. Roderigo confronts Iago about the lack of results from his money; Iago convinces him to kill Cassio.",
+        modernSummary: "Othello questions Emilia about Desdemona's behavior with Cassio. Emilia insists Desdemona is honest. Othello doesn't believe her and summons Desdemona. He treats her like a prostitute, calling her a 'whore' and the bedroom a 'brothel'. Desdemona is bewildered and devastated - she genuinely doesn't understand what she's done wrong. Emilia comforts her afterward. Meanwhile, Roderigo is tired of giving Iago money and jewels with no results. Iago quickly convinces him that killing Cassio is the only way to keep Othello (and Desdemona) in Cyprus.",
+        keyMoments: ["Othello's 'brothel scene' - treating Desdemona as a prostitute", "'His unkindness may defeat my life, But never taint my love'", "Emilia's defense of Desdemona", "Iago manipulating Roderigo one last time"],
+        significance: "Shows the complete transformation of Othello and Desdemona's relationship. The domestic cruelty is harder to watch than the final violence." },
+      { act: 4, scene: 3, title: "Another Room", setting: "Another room in the castle.",
+        summary: "Desdemona prepares for bed, singing the Willow Song about abandoned love. She and Emilia discuss whether women would ever commit adultery. Emilia's proto-feminist speech argues that wives have the same feelings as husbands.",
+        modernSummary: "Desdemona prepares for bed, sensing something terrible coming. She tells Emilia about her mother's maid Barbary who was abandoned by her lover and sang the 'Willow Song' before dying. Desdemona sings it herself. She asks Emilia if she thinks there are really women who cheat on their husbands. Emilia says yes, and gives a speech about how husbands treat their wives badly, so why should wives be held to higher standards? Desdemona says she wouldn't cheat even for all the world.",
+        keyMoments: ["The Willow Song - foreshadowing death", "Emilia's feminist speech about women's equality", "The contrast between Desdemona's idealism and Emilia's pragmatism"],
+        significance: "A quiet, haunting scene before the storm. The Willow Song connects female love with death. Emilia's speech is remarkable for its time." },
+      { act: 5, scene: 1, title: "A Street", setting: "A street.",
+        summary: "Roderigo attacks Cassio but is wounded. Iago wounds Cassio from behind and kills Roderigo to silence him. Bianca's presence allows Iago to blame her for the attack.",
+        modernSummary: "Roderigo tries to kill Cassio but only manages to wound him slightly. Cassio fights back and wounds Roderigo. Iago sneaks up and stabs Cassio in the leg, then runs away. Othello hears the commotion and thinks Iago has kept his promise to kill Cassio - this strengthens his resolve to kill Desdemona. Lodovico and Gratiano find the wounded men. Iago returns, 'discovering' the scene, and kills Roderigo, pretending to be avenging Cassio. When Bianca arrives, Iago uses her as a scapegoat.",
+        keyMoments: ["The failed assassination attempt", "Iago kills Roderigo to silence him", "Othello is further convinced to proceed with murder"],
+        significance: "The violence escalates. Iago shows his willingness to kill when necessary while maintaining his innocent appearance." },
+      { act: 5, scene: 2, title: "A Bedchamber", setting: "A bedchamber in the castle. Desdemona in bed asleep.",
+        summary: "Othello smothers Desdemona despite her protests of innocence. Emilia discovers the murder and exposes Iago's plot. Othello wounds Iago and kills himself. Iago is arrested; Cassio becomes governor of Cyprus.",
+        modernSummary: "Othello enters the bedroom where Desdemona sleeps. In a famous soliloquy, he steels himself for murder while still struggling with love. He wakes her with a kiss. He tells her to pray, to make peace with God before dying. Desdemona begs for her life, denies the affair, and asks for proof. When Othello says Cassio confessed and has her handkerchief, and that he's already dead, Desdemona weeps - which Othello takes as proof of guilt. He smothers her. Emilia pounds on the door with news that Cassio has survived. She discovers Desdemona dying - who protects Othello with her last breath ('Nobody; I myself'). When Emilia learns Othello did it because of the handkerchief, she realises Iago's plot and exposes him despite his threats. Iago kills her. Othello attacks Iago but only wounds him. Letters found on Roderigo confirm everything. Othello gives a final speech about his service to Venice and his tragic error, then kills himself. Iago is arrested to face torture.",
+        keyMoments: ["'It is the cause, it is the cause, my soul'", "The murder of Desdemona", "'Commend me to my kind lord' - Desdemona's dying words", "Emilia's exposure of Iago", "'I kissed thee ere I killed thee' - Othello's death", "'Demand me nothing. What you know, you know' - Iago's silence"],
+        significance: "The tragic conclusion. Note the symmetry with the beginning: the play opened with Iago talking, it ends with his silence. Othello's final speech is controversial - self-justification or genuine insight?" }
+    ];
+
+    const PAST_EXAM_QUESTIONS = [
+      { year: 2023, question: "\"Othello's nobility makes his downfall even more tragic.\" Discuss this statement in the light of your reading of the play.", type: "Character", focus: ["Othello", "Tragedy", "Nobility"], hints: "Consider Othello's opening presentation vs his end. Use quotes showing his eloquence and dignity. Discuss whether nobility makes him vulnerable. Connect to the concept of hamartia." },
+      { year: 2023, question: "\"Iago's motivations remain a mystery.\" Discuss this statement with reference to the play.", type: "Character", focus: ["Iago", "Motivation", "Villainy"], hints: "List his stated motives (promotion, Emilia, race). Are they adequate? Consider 'motiveless malignity'. Discuss his soliloquies and what they reveal." },
+      { year: 2022, question: "\"The tragedy of Othello lies in the destruction of love.\" Discuss this view of the play.", type: "Theme", focus: ["Love", "Tragedy", "Relationships"], hints: "Examine the nature of Othello and Desdemona's love. How is it destroyed? Consider other relationships (Iago/Emilia, Cassio/Bianca). The handkerchief as symbol." },
+      { year: 2021, question: "\"Desdemona's death was inevitable from the moment she married Othello.\" Discuss.", type: "Character/Theme", focus: ["Desdemona", "Marriage", "Fate"], hints: "Consider societal attitudes to their marriage. Brabantio's warning. Whether Desdemona has agency. The role of the handkerchief." },
+      { year: 2020, question: "\"Iago succeeds because other characters have fatal weaknesses.\" Discuss with reference to the play.", type: "Character", focus: ["Iago", "Othello", "Cassio", "Weakness"], hints: "Identify each character's weakness. How does Iago exploit them? Othello's insecurity, Cassio's drinking, Roderigo's lovesickness." },
+      { year: 2019, question: "\"In Othello, appearance counts for more than reality.\" Discuss.", type: "Theme", focus: ["Appearance vs Reality", "Deception"], hints: "Iago's reputation as 'honest'. The handkerchief as false proof. Whether anyone truly knows anyone else. Othello's misreading of Desdemona." },
+      { year: 2018, question: "\"Emilia is the moral compass of the play.\" To what extent do you agree?", type: "Character", focus: ["Emilia", "Morality", "Women"], hints: "Her Act 4 Scene 3 speech. Her role in exposing Iago. Compare her moral growth to other characters. Her sacrifice." },
+      { year: 2017, question: "\"Othello is not truly noble, but deeply flawed from the beginning.\" Discuss.", type: "Character", focus: ["Othello", "Nobility", "Flaws"], hints: "Examine his early speeches - confidence or arrogance? His insecurities about race and age. Does he truly know Desdemona? His transformation." },
+      { year: 2016, question: "\"The handkerchief is the most important symbol in the play.\" Discuss the role of the handkerchief in Othello.", type: "Symbol/Theme", focus: ["Handkerchief", "Symbolism", "Evidence"], hints: "Its history (Egyptian charmer). Its journey through the play. What it represents to different characters. 'Ocular proof.'" },
+      { year: 2015, question: "\"In Othello, Shakespeare creates a world where women are victims.\" Discuss.", type: "Theme", focus: ["Women", "Patriarchy", "Victimhood"], hints: "The fates of Desdemona, Emilia, and Bianca. Male control and ownership. But also female agency - Desdemona's choice to marry, Emilia's speech." }
+    ];
+
+    const KEY_QUOTES = [
+      { quote: "I am not what I am", speaker: "Iago", act: "1.1", theme: "Appearance vs Reality", analysis: "Iago's fundamental statement of his duplicitous nature. It inverts God's self-description in Exodus ('I am that I am'), suggesting Iago is diabolical. This is the key to understanding his character: he is pure deception." },
+      { quote: "Even now, now, very now, an old black ram Is tupping your white ewe", speaker: "Iago", act: "1.1", theme: "Race", analysis: "Iago's racist imagery reduces Othello and Desdemona's love to bestial sexuality. The contrast of 'black' and 'white' emphasises racial difference. This establishes the racist context of Venetian society." },
+      { quote: "She loved me for the dangers I had passed, And I loved her that she did pity them", speaker: "Othello", act: "1.3", theme: "Love", analysis: "Othello explains how they fell in love through storytelling. But this raises questions: do they love each other, or the romantic narrative? Is their love based on idealisation rather than reality?" },
+      { quote: "Look to her, Moor, if thou hast eyes to see: She has deceived her father, and may thee", speaker: "Brabantio", act: "1.3", theme: "Deception", analysis: "Brabantio's bitter warning will later be twisted by Iago. Note the irony: Desdemona 'deceived' her father to marry Othello out of love, not deception. But Iago uses this to suggest a pattern of betrayal." },
+      { quote: "O, beware, my lord, of jealousy! It is the green-eyed monster which doth mock the meat it feeds on", speaker: "Iago", act: "3.3", theme: "Jealousy", analysis: "The most famous lines about jealousy in literature. Note the brilliant manipulation: by warning against jealousy, Iago plants it. The 'green-eyed monster' has entered everyday language." },
+      { quote: "Trifles light as air Are to the jealous confirmations strong As proofs of holy writ", speaker: "Iago", act: "3.3", theme: "Jealousy", analysis: "Iago describes how jealousy distorts perception. This foreshadows the handkerchief - a 'trifle' that becomes 'proof'. The religious imagery ('holy writ') shows how jealousy becomes a false religion." },
+      { quote: "Haply, for I am black And have not those soft parts of conversation That chamberers have", speaker: "Othello", act: "3.3", theme: "Race", analysis: "Othello internalises racist assumptions about himself. He sees his blackness and age as deficiencies. This is Iago's poison working: making Othello see himself through racist eyes." },
+      { quote: "Her name, that was as fresh As Dian's visage, is now begrimed and black As mine own face", speaker: "Othello", act: "3.3", theme: "Race", analysis: "Othello uses his own blackness as a metaphor for corruption. He associates whiteness with purity (Dian/Diana, goddess of chastity) and blackness with sin. He has completely absorbed racist thinking." },
+      { quote: "Let husbands know Their wives have sense like them: they see, and smell, And have their palates both for sweet and sour, As husbands have", speaker: "Emilia", act: "4.3", theme: "Women", analysis: "Emilia's proto-feminist manifesto. She argues women are equal to men in their feelings and desires. Revolutionary for Shakespeare's time and a key passage for essays on gender." },
+      { quote: "His unkindness may defeat my life, But never taint my love", speaker: "Desdemona", act: "4.2", theme: "Love", analysis: "Desdemona's unconditional love even when Othello mistreats her. Some see this as weakness; others as strength. Either way, it shows the complete contrast with Othello's conditional love." },
+      { quote: "It is the cause, it is the cause, my soul. Let me not name it to you, you chaste stars!", speaker: "Othello", act: "5.2", theme: "Self-Deception", analysis: "Othello can't name what he's about to do (murder), calling it 'the cause'. He appeals to 'chaste stars' while about to kill his chaste wife. The self-deception is complete." },
+      { quote: "Put out the light, and then put out the light", speaker: "Othello", act: "5.2", theme: "Death", analysis: "The double meaning: he'll extinguish the candle, then Desdemona's life. The repetition emphasises the finality. Light symbolises Desdemona's life and goodness." },
+      { quote: "Nobody; I myself. Farewell. Commend me to my kind lord", speaker: "Desdemona", act: "5.2", theme: "Love", analysis: "Desdemona's dying words protect Othello. She calls him 'kind' even as he kills her. This either shows ultimate forgiveness or ultimate victimhood. A key moment for interpretation." },
+      { quote: "I kissed thee ere I killed thee: no way but this, Killing myself, to die upon a kiss", speaker: "Othello", act: "5.2", theme: "Love and Death", analysis: "Othello's final words link love and death. The kiss bookends the relationship (cf. his arrival in Cyprus). There's a terrible romanticism that may be self-serving or genuinely tragic." },
+      { quote: "Demand me nothing. What you know, you know. From this time forth I never will speak word", speaker: "Iago", act: "5.2", theme: "Silence", analysis: "Iago's final silence is his last act of control. By refusing to explain, he denies closure. Some see this as pure evil; others as recognition that his motives are inexplicable even to himself." }
+    ];
+
+    const LITERARY_TECHNIQUES = [
+      { name: "Dramatic Irony", definition: "When the audience knows something characters don't", examples: ["Iago is called 'honest' repeatedly", "Othello trusts Iago completely", "The audience knows Desdemona is innocent"], significance: "Creates tension and makes the tragedy more painful to watch" },
+      { name: "Soliloquy", definition: "A speech where a character reveals their inner thoughts to the audience", examples: ["Iago's plotting soliloquies in Acts 1-2", "Othello's 'It is the cause' speech"], significance: "Reveals true motivations, especially Iago's villainy" },
+      { name: "Imagery", definition: "Vivid descriptive language creating mental pictures", examples: ["Animal imagery (ram, ewe, beast)", "Hell and devil imagery for Iago", "Disease imagery ('pestilence')", "Black and white throughout"], significance: "Reinforces themes of bestiality, evil, and racial difference" },
+      { name: "Symbolism", definition: "Objects that represent larger meanings", examples: ["The handkerchief (love, fidelity, 'proof')", "Light/dark (innocence, corruption)", "The bed (marriage, death)"], significance: "The handkerchief carries enormous symbolic weight throughout" },
+      { name: "Repetition", definition: "Repeated words and phrases for emphasis", examples: ["'Put money in thy purse'", "'Honest' (for Iago)", "'The handkerchief!'", "'It is the cause'"], significance: "Creates emphasis, shows obsession, builds dramatic tension" },
+      { name: "Foreshadowing", definition: "Hints about future events", examples: ["Brabantio's warning about deception", "The Willow Song before Desdemona's death", "Othello's 'If it were now to die'"], significance: "Creates sense of inevitable tragedy" }
+    ];
+
+    // MAIN COMPONENT
+    function OthelloStudyCompanion() {
+      const [activeTab, setActiveTab] = useState('overview');
+      const [selectedCharacter, setSelectedCharacter] = useState(null);
+      const [selectedTheme, setSelectedTheme] = useState(null);
+      const [searchQuery, setSearchQuery] = useState('');
+      const [quizMode, setQuizMode] = useState(false);
+      const [quizQuestions, setQuizQuestions] = useState([]);
+      const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
+      const [quizScore, setQuizScore] = useState(0);
+      const [showAnswer, setShowAnswer] = useState(false);
+      const [essayTopic, setEssayTopic] = useState('');
+      const [essayPlan, setEssayPlan] = useState(null);
+      const [bookmarkedQuotes, setBookmarkedQuotes] = useState([]);
+      const [activeSceneAct, setActiveSceneAct] = useState(1);
+
+      const generateQuiz = () => {
+        const questions = [];
+        Object.values(CHARACTERS).forEach(char => {
+          if (char.keyQuotes && char.keyQuotes.length > 0) {
+            const q = char.keyQuotes[Math.floor(Math.random() * char.keyQuotes.length)];
+            questions.push({ type: 'quote_speaker', question: `Who says: "${q.quote}"?`, answer: char.name, hint: `Act ${q.act}` });
+          }
+        });
+        const shuffled = questions.sort(() => Math.random() - 0.5).slice(0, 10);
+        setQuizQuestions(shuffled);
+        setCurrentQuizIndex(0);
+        setQuizScore(0);
+        setShowAnswer(false);
+        setQuizMode(true);
+      };
+
+      const searchResults = useMemo(() => {
+        if (!searchQuery.trim()) return [];
+        const query = searchQuery.toLowerCase();
+        const results = [];
+        KEY_QUOTES.forEach(q => {
+          if (q.quote.toLowerCase().includes(query) || q.speaker.toLowerCase().includes(query)) {
+            results.push({ type: 'quote', data: q });
+          }
+        });
+        Object.values(CHARACTERS).forEach(char => {
+          if (char.name.toLowerCase().includes(query)) {
+            results.push({ type: 'character', data: char });
+          }
+        });
+        return results.slice(0, 10);
+      }, [searchQuery]);
+
+      const generateEssayPlan = () => {
+        if (!essayTopic.trim()) return;
+        const topic = essayTopic.toLowerCase();
+        const plan = { topic: essayTopic, paragraphs: [], relevantQuotes: [] };
+        
+        Object.values(THEMES).forEach(theme => {
+          if (topic.includes(theme.name.toLowerCase())) {
+            plan.paragraphs.push({ focus: theme.name, points: theme.keyPoints.slice(0, 3), quotes: theme.quotes });
+            plan.relevantQuotes.push(...theme.quotes);
+          }
+        });
+        
+        Object.values(CHARACTERS).forEach(char => {
+          if (topic.includes(char.name.toLowerCase())) {
+            plan.paragraphs.push({ focus: char.name, points: [char.arc, ...char.keyTraits.slice(0, 2).map(t => `${char.name} is ${t.toLowerCase()}`)], quotes: char.keyQuotes || [] });
+            if (char.keyQuotes) plan.relevantQuotes.push(...char.keyQuotes);
+          }
+        });
+        
+        if (plan.paragraphs.length === 0) {
+          plan.paragraphs = [
+            { focus: "Introduction", points: ["Define topic", "Thesis statement"], quotes: [] },
+            { focus: "Main Argument", points: ["Key evidence", "Textual support"], quotes: KEY_QUOTES.slice(0, 3) }
+          ];
+          plan.relevantQuotes = KEY_QUOTES.slice(0, 5);
+        }
+        setEssayPlan(plan);
+      };
+
+      const toggleBookmark = (quote) => {
+        setBookmarkedQuotes(prev => {
+          const exists = prev.find(q => q.quote === quote.quote);
+          if (exists) return prev.filter(q => q.quote !== quote.quote);
+          return [...prev, quote];
+        });
+      };
+
+      const isBookmarked = (quote) => bookmarkedQuotes.some(q => q.quote === quote.quote);
+
+      const tabs = [
+        { id: 'overview', label: 'Overview', icon: '📖' },
+        { id: 'scenes', label: 'Full Play', icon: '🎭' },
+        { id: 'characters', label: 'Characters', icon: '👥' },
+        { id: 'themes', label: 'Themes', icon: '💡' },
+        { id: 'quotes', label: 'Key Quotes', icon: '💬' },
+        { id: 'techniques', label: 'Techniques', icon: '🎨' },
+        { id: 'exams', label: 'Past Papers', icon: '📝' },
+        { id: 'essay', label: 'Essay Planner', icon: '✍️' },
+        { id: 'quiz', label: 'Quiz', icon: '🎯' },
+        { id: 'bookmarks', label: 'Bookmarks', icon: '⭐' }
+      ];
+
+      return (
+        <div style={styles.appContainer}>
+          <header style={styles.header}>
+            <div style={styles.headerContent}>
+              <div style={styles.titleSection}>
+                <div>
+                  <h1 style={styles.mainTitle}>Othello</h1>
+                  <p style={styles.subtitle}>Leaving Certificate Complete Study Companion</p>
+                </div>
+                <div style={styles.searchContainer}>
+                  <span style={styles.searchIcon}>🔍</span>
+                  <input type="text" style={styles.searchInput} placeholder="Search quotes, characters..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                  {searchResults.length > 0 && searchQuery && (
+                    <div style={styles.searchResults}>
+                      {searchResults.map((result, i) => (
+                        <div key={i} style={styles.searchResultItem} onClick={() => { setActiveTab(result.type === 'quote' ? 'quotes' : 'characters'); setSearchQuery(''); }}>
+                          <div style={styles.searchResultType}>{result.type}</div>
+                          <div style={styles.searchResultTitle}>{result.type === 'quote' ? `"${result.data.quote.substring(0, 40)}..."` : result.data.name}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <nav style={styles.navTabs}>
+                {tabs.map(tab => (
+                  <button key={tab.id} style={{...styles.navTab, ...(activeTab === tab.id ? styles.navTabActive : {})}} onClick={() => { setActiveTab(tab.id); setQuizMode(false); }}>
+                    <span>{tab.icon}</span> <span>{tab.label}</span>
+                  </button>
+                ))}
+              </nav>
+            </div>
+          </header>
+
+          <main style={styles.mainContent}>
+            {activeTab === 'overview' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Study Overview</h2>
+                <div style={styles.overviewStats}>
+                  {[{n: '5', l: 'Acts'}, {n: '15', l: 'Scenes'}, {n: '8', l: 'Characters'}, {n: '7', l: 'Themes'}, {n: '15', l: 'Key Quotes'}, {n: '10', l: 'Past Papers'}].map((s, i) => (
+                    <div key={i} style={styles.statCard}><div style={styles.statNumber}>{s.n}</div><div style={styles.statLabel}>{s.l}</div></div>
+                  ))}
+                </div>
+                <div style={styles.card}>
+                  <h3 style={styles.cardTitle}>The Tragedy of Othello, The Moor of Venice</h3>
+                  <p style={styles.cardText}>
+                    <strong>Othello</strong> is one of Shakespeare's greatest tragedies, written around 1603-1604. It tells the story of a noble Moorish general whose life is destroyed by his ensign Iago's manipulation. The play explores jealousy, race, love, betrayal, and the devastating consequences of trusting the wrong people.
+                  </p>
+                  <p style={{...styles.cardText, marginTop: '1rem'}}>
+                    For the <strong>Leaving Certificate</strong>, you need to understand characters, themes, dramatic techniques, and write analytical essays. This companion contains everything you need.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'scenes' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Full Play: Scene by Scene</h2>
+                <div style={styles.sceneNav}>
+                  {[1,2,3,4,5].map(act => (
+                    <button key={act} style={{...styles.actBtn, ...(activeSceneAct === act ? styles.actBtnActive : {})}} onClick={() => setActiveSceneAct(act)}>Act {act}</button>
+                  ))}
+                </div>
+                {SCENES.filter(s => s.act === activeSceneAct).map((scene, i) => (
+                  <SceneCard key={i} scene={scene} />
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'characters' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Character Analysis</h2>
+                <div style={styles.grid2}>
+                  {Object.values(CHARACTERS).map((char, i) => (
+                    <div key={i} style={styles.card} onClick={() => setSelectedCharacter(char)}>
+                      <span style={styles.roleBadge}>{char.role}</span>
+                      <h3 style={styles.cardTitle}>{char.name}</h3>
+                      {char.title && <p style={styles.cardSubtitle}>{char.title}</p>}
+                      <p style={styles.cardText}>{char.description.substring(0, 150)}...</p>
+                      <div style={styles.traitsList}>
+                        {char.keyTraits?.slice(0, 4).map((trait, j) => (
+                          <span key={j} style={styles.traitTag}>{trait}</span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'themes' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Themes & Motifs</h2>
+                <div style={styles.grid2}>
+                  {Object.values(THEMES).map((theme, i) => (
+                    <div key={i} style={styles.card} onClick={() => setSelectedTheme(theme)}>
+                      <h3 style={styles.cardTitle}>{theme.name}</h3>
+                      <p style={styles.cardSubtitle}>{theme.subtitle}</p>
+                      <p style={styles.cardText}>{theme.description}</p>
+                      <div style={styles.analysisBox}>
+                        <div style={styles.analysisTitle}>Exam Tip</div>
+                        <p style={{fontSize: '0.9rem', color: 'rgba(232, 228, 224, 0.75)'}}>{theme.examTip}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'quotes' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Key Quotes & Analysis</h2>
+                {KEY_QUOTES.map((quote, i) => (
+                  <div key={i} style={styles.quoteCard}>
+                    <button style={{...styles.bookmarkBtn, opacity: isBookmarked(quote) ? 1 : 0.5}} onClick={() => toggleBookmark(quote)}>{isBookmarked(quote) ? '⭐' : '☆'}</button>
+                    <p style={styles.quoteText}>"{quote.quote}"</p>
+                    <div style={styles.quoteMeta}>
+                      <span style={styles.quoteSpeaker}>{quote.speaker}</span>
+                      <span style={styles.quoteAct}>Act {quote.act}</span>
+                      <span style={styles.quoteTheme}>{quote.theme}</span>
+                    </div>
+                    <div style={styles.analysisBox}>
+                      <div style={styles.analysisTitle}>Analysis</div>
+                      <p style={{fontSize: '0.95rem', color: 'rgba(232, 228, 224, 0.85)'}}>{quote.analysis}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'techniques' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Literary & Dramatic Techniques</h2>
+                {LITERARY_TECHNIQUES.map((tech, i) => (
+                  <div key={i} style={styles.card}>
+                    <h3 style={styles.cardTitle}>{tech.name}</h3>
+                    <p style={{...styles.cardText, fontStyle: 'italic', marginBottom: '1rem'}}>{tech.definition}</p>
+                    <div style={styles.analysisTitle}>Examples</div>
+                    {tech.examples.map((ex, j) => <div key={j} style={styles.planItem}>{ex}</div>)}
+                    <div style={{...styles.analysisBox, marginTop: '1rem'}}>
+                      <strong>Significance:</strong> {tech.significance}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'exams' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Past Exam Questions (2015-2023)</h2>
+                {PAST_EXAM_QUESTIONS.map((exam, i) => (
+                  <div key={i} style={styles.examCard}>
+                    <span style={styles.examYear}>{exam.year}</span>
+                    <span style={styles.examType}>{exam.type}</span>
+                    <p style={styles.examQuestion}>{exam.question}</p>
+                    <div style={styles.examHints}>
+                      <div style={styles.hintsTitle}>Approach Hints</div>
+                      <p style={{fontSize: '0.9rem', color: 'rgba(232, 228, 224, 0.8)'}}>{exam.hints}</p>
+                      <div style={styles.focusTags}>
+                        {exam.focus.map((tag, j) => <span key={j} style={styles.focusTag}>{tag}</span>)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'essay' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Essay Planner</h2>
+                <div style={styles.card}>
+                  <h3 style={styles.cardTitle}>Enter Your Essay Question</h3>
+                  <textarea style={styles.essayTextarea} placeholder='e.g., "Othello is not truly noble, but deeply flawed."' value={essayTopic} onChange={(e) => setEssayTopic(e.target.value)} />
+                  <button style={styles.generateBtn} onClick={generateEssayPlan}>Generate Essay Plan</button>
+                </div>
+                {essayPlan && (
+                  <div style={{...styles.card, marginTop: '1rem'}}>
+                    <h3 style={styles.cardTitle}>Essay Plan</h3>
+                    {essayPlan.paragraphs.map((para, i) => (
+                      <div key={i} style={{marginBottom: '1.5rem'}}>
+                        <h4 style={{color: '#d4af37', marginBottom: '0.5rem'}}>Paragraph {i+1}: {para.focus}</h4>
+                        {para.points.map((p, j) => <div key={j} style={styles.planItem}>{p}</div>)}
+                        {para.quotes.slice(0, 2).map((q, k) => (
+                          <p key={k} style={{marginTop: '0.5rem', fontStyle: 'italic', fontSize: '0.9rem'}}>"{q.quote}" - {q.speaker}</p>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'quiz' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Test Your Knowledge</h2>
+                {!quizMode ? (
+                  <div style={{...styles.card, textAlign: 'center', padding: '3rem'}}>
+                    <h3 style={styles.cardTitle}>Ready to Test Yourself?</h3>
+                    <p style={styles.cardText}>Take a quiz on quotes and characters from Othello.</p>
+                    <button style={styles.startQuizBtn} onClick={generateQuiz}>Start Quiz (10 Questions)</button>
+                  </div>
+                ) : currentQuizIndex < quizQuestions.length ? (
+                  <div style={styles.card}>
+                    <div style={styles.quizProgress}>Question {currentQuizIndex + 1}/{quizQuestions.length} | Score: {quizScore}</div>
+                    <p style={styles.quizQuestion}>{quizQuestions[currentQuizIndex].question}</p>
+                    <p style={styles.quizHint}>Hint: {quizQuestions[currentQuizIndex].hint}</p>
+                    {showAnswer && <div style={styles.quizAnswer}><div style={styles.answerLabel}>Answer</div><div style={styles.answerText}>{quizQuestions[currentQuizIndex].answer}</div></div>}
+                    <div style={styles.quizButtons}>
+                      {!showAnswer ? (
+                        <button style={styles.quizBtnReveal} onClick={() => setShowAnswer(true)}>Reveal Answer</button>
+                      ) : (
+                        <>
+                          <button style={styles.quizBtnCorrect} onClick={() => { setQuizScore(s => s+1); setShowAnswer(false); setCurrentQuizIndex(i => i+1); }}>I Got It Right ✓</button>
+                          <button style={styles.quizBtnIncorrect} onClick={() => { setShowAnswer(false); setCurrentQuizIndex(i => i+1); }}>I Got It Wrong ✗</button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{...styles.card, textAlign: 'center', padding: '3rem'}}>
+                    <h3 style={styles.cardTitle}>Quiz Complete!</h3>
+                    <div style={styles.statNumber}>{quizScore}/{quizQuestions.length}</div>
+                    <button style={styles.startQuizBtn} onClick={generateQuiz}>Try Again</button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'bookmarks' && (
+              <div>
+                <h2 style={styles.sectionTitle}>Your Bookmarked Quotes</h2>
+                {bookmarkedQuotes.length > 0 ? bookmarkedQuotes.map((quote, i) => (
+                  <div key={i} style={styles.quoteCard}>
+                    <button style={{...styles.bookmarkBtn, opacity: 1}} onClick={() => toggleBookmark(quote)}>⭐</button>
+                    <p style={styles.quoteText}>"{quote.quote}"</p>
+                    <div style={styles.quoteMeta}>
+                      <span style={styles.quoteSpeaker}>{quote.speaker}</span>
+                      <span style={styles.quoteAct}>Act {quote.act}</span>
+                    </div>
+                  </div>
+                )) : (
+                  <div style={styles.emptyState}>
+                    <div style={{fontSize: '3rem', opacity: 0.5}}>⭐</div>
+                    <p>No bookmarked quotes yet. Click the star on any quote to save it.</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </main>
+
+          {selectedCharacter && (
+            <div style={styles.modalOverlay} onClick={() => setSelectedCharacter(null)}>
+              <div style={styles.modalContent} onClick={e => e.stopPropagation()}>
+                <button style={styles.modalClose} onClick={() => setSelectedCharacter(null)}>×</button>
+                <span style={styles.roleBadge}>{selectedCharacter.role}</span>
+                <h2 style={{...styles.cardTitle, fontSize: '2rem', marginTop: '0.5rem'}}>{selectedCharacter.name}</h2>
+                {selectedCharacter.title && <p style={styles.cardSubtitle}>{selectedCharacter.title}</p>}
+                <p style={{...styles.cardText, margin: '1rem 0'}}>{selectedCharacter.description}</p>
+                {selectedCharacter.arc && <><h4 style={{color: '#d4af37', marginTop: '1rem'}}>Character Arc</h4><p style={styles.cardText}>{selectedCharacter.arc}</p></>}
+                <h4 style={{color: '#d4af37', marginTop: '1rem'}}>Key Traits</h4>
+                <div style={styles.traitsList}>{selectedCharacter.keyTraits?.map((t, i) => <span key={i} style={styles.traitTag}>{t}</span>)}</div>
+                {selectedCharacter.keyQuotes && <>
+                  <h4 style={{color: '#d4af37', marginTop: '1rem'}}>Key Quotes</h4>
+                  {selectedCharacter.keyQuotes.slice(0, 4).map((q, i) => (
+                    <div key={i} style={{margin: '0.5rem 0', padding: '0.5rem', background: 'rgba(0,0,0,0.3)', borderRadius: '6px'}}>
+                      <p style={{fontStyle: 'italic'}}>"{q.quote}"</p>
+                      <p style={{fontSize: '0.85rem', color: 'rgba(212, 175, 55, 0.7)'}}>Act {q.act}</p>
+                    </div>
+                  ))}
+                </>}
+                {selectedCharacter.examFocus && <div style={{...styles.analysisBox, marginTop: '1rem'}}><div style={styles.analysisTitle}>Exam Focus</div><p>{selectedCharacter.examFocus}</p></div>}
+              </div>
+            </div>
+          )}
+
+          {selectedTheme && (
+            <div style={styles.modalOverlay} onClick={() => setSelectedTheme(null)}>
+              <div style={styles.modalContent} onClick={e => e.stopPropagation()}>
+                <button style={styles.modalClose} onClick={() => setSelectedTheme(null)}>×</button>
+                <h2 style={{...styles.cardTitle, fontSize: '2rem'}}>{selectedTheme.name}</h2>
+                <p style={styles.cardSubtitle}>{selectedTheme.subtitle}</p>
+                <p style={{...styles.cardText, margin: '1rem 0'}}>{selectedTheme.description}</p>
+                <h4 style={{color: '#d4af37', marginTop: '1rem'}}>Key Points</h4>
+                {selectedTheme.keyPoints.map((p, i) => <div key={i} style={styles.planItem}>{p}</div>)}
+                <h4 style={{color: '#d4af37', marginTop: '1rem'}}>Key Quotes</h4>
+                {selectedTheme.quotes.map((q, i) => (
+                  <div key={i} style={{margin: '0.5rem 0', padding: '0.5rem', background: 'rgba(0,0,0,0.3)', borderRadius: '6px'}}>
+                    <p style={{fontStyle: 'italic'}}>"{q.quote}"</p>
+                    <p style={{fontSize: '0.85rem', color: '#d4af37'}}>{q.speaker}, Act {q.act}</p>
+                  </div>
+                ))}
+                <div style={{...styles.analysisBox, marginTop: '1rem'}}><div style={styles.analysisTitle}>Exam Tip</div><p>{selectedTheme.examTip}</p></div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function SceneCard({ scene }) {
+      const [viewMode, setViewMode] = useState('modern');
+      return (
+        <div style={styles.card}>
+          <span style={{fontSize: '0.9rem', color: 'rgba(212, 175, 55, 0.6)'}}>Act {scene.act}, Scene {scene.scene}</span>
+          <h3 style={styles.cardTitle}>{scene.title}</h3>
+          <p style={{fontStyle: 'italic', color: 'rgba(232, 228, 224, 0.5)', marginBottom: '1rem'}}>{scene.setting}</p>
+          <div style={{display: 'flex', gap: '0.5rem', marginBottom: '1rem'}}>
+            <button style={{...styles.toggleBtn, ...(viewMode === 'modern' ? styles.toggleBtnActive : {})}} onClick={() => setViewMode('modern')}>Modern English</button>
+            <button style={{...styles.toggleBtn, ...(viewMode === 'original' ? styles.toggleBtnActive : {})}} onClick={() => setViewMode('original')}>Original Summary</button>
+          </div>
+          <p style={styles.cardText}>{viewMode === 'modern' ? scene.modernSummary : scene.summary}</p>
+          <div style={{marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(212, 175, 55, 0.1)'}}>
+            <div style={{fontSize: '0.85rem', color: 'rgba(212, 175, 55, 0.8)', marginBottom: '0.5rem', fontWeight: 600}}>Key Moments</div>
+            {scene.keyMoments.map((m, i) => <div key={i} style={styles.planItem}>{m}</div>)}
+          </div>
+          <div style={{...styles.analysisBox, marginTop: '1rem'}}>
+            <div style={styles.analysisTitle}>Significance</div>
+            <p style={{fontSize: '0.9rem'}}>{scene.significance}</p>
+          </div>
+        </div>
+      );
+    }
+
+    const styles = {
+      appContainer: { minHeight: '100vh', background: 'linear-gradient(135deg, #0a0a0f 0%, #1a1520 50%, #0d0d12 100%)', color: '#e8e4e0', fontFamily: "'Crimson Pro', Georgia, serif" },
+      header: { background: 'linear-gradient(180deg, rgba(15, 12, 20, 0.98) 0%, rgba(15, 12, 20, 0.9) 100%)', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', padding: '1.5rem 2rem', position: 'sticky', top: 0, zIndex: 100 },
+      headerContent: { maxWidth: '1400px', margin: '0 auto' },
+      titleSection: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' },
+      mainTitle: { fontFamily: "'Cormorant Garamond', serif", fontSize: '2.5rem', fontWeight: 700, background: 'linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', letterSpacing: '0.05em' },
+      subtitle: { fontFamily: "'Crimson Pro', serif", fontSize: '1rem', color: 'rgba(212, 175, 55, 0.7)', fontStyle: 'italic', marginTop: '0.25rem' },
+      searchContainer: { position: 'relative', maxWidth: '400px', width: '100%' },
+      searchIcon: { position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'rgba(212, 175, 55, 0.6)' },
+      searchInput: { width: '100%', padding: '0.75rem 1rem 0.75rem 2.5rem', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '8px', color: '#e8e4e0', fontFamily: "'Source Sans Pro', sans-serif", fontSize: '0.95rem' },
+      searchResults: { position: 'absolute', top: '100%', left: 0, right: 0, background: 'rgba(20, 18, 25, 0.98)', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '8px', maxHeight: '300px', overflow: 'auto', zIndex: 1000, marginTop: '0.5rem' },
+      searchResultItem: { padding: '0.75rem 1rem', borderBottom: '1px solid rgba(212, 175, 55, 0.1)', cursor: 'pointer' },
+      searchResultType: { fontSize: '0.7rem', textTransform: 'uppercase', color: 'rgba(212, 175, 55, 0.6)', marginBottom: '0.25rem' },
+      searchResultTitle: { color: '#d4af37', fontWeight: 600 },
+      navTabs: { display: 'flex', gap: '0.25rem', overflowX: 'auto', paddingBottom: '0.5rem' },
+      navTab: { padding: '0.6rem 1rem', background: 'transparent', border: '1px solid transparent', borderRadius: '6px', color: 'rgba(232, 228, 224, 0.6)', fontFamily: "'Source Sans Pro', sans-serif", fontSize: '0.85rem', cursor: 'pointer', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '0.5rem' },
+      navTabActive: { background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%)', borderColor: 'rgba(212, 175, 55, 0.4)', color: '#d4af37' },
+      mainContent: { maxWidth: '1400px', margin: '0 auto', padding: '2rem' },
+      sectionTitle: { fontFamily: "'Cormorant Garamond', serif", fontSize: '2rem', color: '#d4af37', marginBottom: '1.5rem', paddingBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)' },
+      card: { background: 'linear-gradient(145deg, rgba(30, 25, 35, 0.8) 0%, rgba(20, 18, 25, 0.9) 100%)', border: '1px solid rgba(212, 175, 55, 0.15)', borderRadius: '12px', padding: '1.5rem', marginBottom: '1rem', cursor: 'pointer' },
+      cardTitle: { fontFamily: "'Cormorant Garamond', serif", fontSize: '1.4rem', color: '#d4af37', marginBottom: '0.75rem' },
+      cardSubtitle: { fontSize: '0.9rem', color: 'rgba(212, 175, 55, 0.7)', fontStyle: 'italic', marginBottom: '1rem' },
+      cardText: { color: 'rgba(232, 228, 224, 0.85)', lineHeight: 1.7 },
+      grid2: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' },
+      overviewStats: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', marginBottom: '2rem' },
+      statCard: { background: 'linear-gradient(145deg, rgba(212, 175, 55, 0.1) 0%, rgba(139, 90, 43, 0.1) 100%)', border: '1px solid rgba(212, 175, 55, 0.2)', borderRadius: '12px', padding: '1.25rem', textAlign: 'center' },
+      statNumber: { fontFamily: "'Cormorant Garamond', serif", fontSize: '2.5rem', color: '#d4af37', lineHeight: 1 },
+      statLabel: { color: 'rgba(232, 228, 224, 0.6)', fontSize: '0.85rem', marginTop: '0.5rem' },
+      roleBadge: { display: 'inline-block', padding: '0.25rem 0.75rem', background: 'rgba(212, 175, 55, 0.15)', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '20px', fontSize: '0.75rem', color: '#d4af37', marginBottom: '0.75rem' },
+      traitsList: { display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' },
+      traitTag: { padding: '0.25rem 0.5rem', background: 'rgba(139, 90, 43, 0.2)', borderRadius: '4px', fontSize: '0.8rem', color: 'rgba(232, 228, 224, 0.8)' },
+      quoteCard: { position: 'relative', background: 'linear-gradient(145deg, rgba(30, 25, 35, 0.8) 0%, rgba(20, 18, 25, 0.9) 100%)', border: '1px solid rgba(212, 175, 55, 0.15)', borderRadius: '12px', padding: '1.5rem', paddingLeft: '2rem', marginBottom: '1rem', borderLeft: '3px solid rgba(212, 175, 55, 0.5)' },
+      quoteText: { fontFamily: "'Crimson Pro', serif", fontSize: '1.1rem', fontStyle: 'italic', color: '#e8e4e0', marginBottom: '0.75rem', lineHeight: 1.6 },
+      quoteMeta: { display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' },
+      quoteSpeaker: { color: '#d4af37', fontWeight: 600 },
+      quoteAct: { color: 'rgba(232, 228, 224, 0.5)', fontSize: '0.85rem' },
+      quoteTheme: { padding: '0.2rem 0.6rem', background: 'rgba(212, 175, 55, 0.1)', borderRadius: '12px', fontSize: '0.75rem', color: 'rgba(212, 175, 55, 0.8)' },
+      bookmarkBtn: { position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer' },
+      analysisBox: { marginTop: '1rem', padding: '1rem', background: 'rgba(0, 0, 0, 0.3)', borderRadius: '8px', borderLeft: '3px solid rgba(139, 90, 43, 0.5)' },
+      analysisTitle: { fontSize: '0.8rem', color: 'rgba(212, 175, 55, 0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' },
+      sceneNav: { display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' },
+      actBtn: { padding: '0.5rem 1.25rem', background: 'rgba(212, 175, 55, 0.1)', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '6px', color: 'rgba(232, 228, 224, 0.7)', fontFamily: "'Cormorant Garamond', serif", fontSize: '1rem', cursor: 'pointer' },
+      actBtnActive: { background: 'rgba(212, 175, 55, 0.25)', borderColor: 'rgba(212, 175, 55, 0.5)', color: '#d4af37' },
+      toggleBtn: { padding: '0.4rem 0.8rem', background: 'transparent', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '4px', color: 'rgba(232, 228, 224, 0.6)', fontSize: '0.8rem', cursor: 'pointer' },
+      toggleBtnActive: { background: 'rgba(212, 175, 55, 0.2)', color: '#d4af37', borderColor: 'rgba(212, 175, 55, 0.5)' },
+      planItem: { padding: '0.5rem 0', paddingLeft: '1rem', borderLeft: '2px solid rgba(139, 90, 43, 0.4)', color: 'rgba(232, 228, 224, 0.85)', marginBottom: '0.25rem' },
+      examCard: { position: 'relative', background: 'linear-gradient(145deg, rgba(30, 25, 35, 0.8) 0%, rgba(20, 18, 25, 0.9) 100%)', border: '1px solid rgba(212, 175, 55, 0.15)', borderRadius: '12px', padding: '1.5rem', marginBottom: '1rem' },
+      examYear: { position: 'absolute', top: '1rem', right: '1rem', padding: '0.3rem 0.8rem', background: 'rgba(212, 175, 55, 0.15)', borderRadius: '4px', fontSize: '0.85rem', color: '#d4af37', fontWeight: 600 },
+      examType: { display: 'inline-block', padding: '0.2rem 0.6rem', background: 'rgba(139, 90, 43, 0.2)', borderRadius: '4px', fontSize: '0.75rem', color: 'rgba(232, 228, 224, 0.7)', marginBottom: '0.75rem' },
+      examQuestion: { fontFamily: "'Crimson Pro', serif", fontSize: '1.15rem', color: '#e8e4e0', lineHeight: 1.6, marginBottom: '1rem' },
+      examHints: { padding: '1rem', background: 'rgba(0, 0, 0, 0.3)', borderRadius: '8px', marginTop: '1rem' },
+      hintsTitle: { fontSize: '0.8rem', color: 'rgba(212, 175, 55, 0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.5rem' },
+      focusTags: { display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.75rem' },
+      focusTag: { padding: '0.2rem 0.6rem', background: 'rgba(212, 175, 55, 0.1)', border: '1px solid rgba(212, 175, 55, 0.2)', borderRadius: '12px', fontSize: '0.75rem', color: 'rgba(212, 175, 55, 0.8)' },
+      essayTextarea: { width: '100%', minHeight: '120px', padding: '1rem', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '8px', color: '#e8e4e0', fontFamily: "'Crimson Pro', serif", fontSize: '1rem', resize: 'vertical', marginBottom: '1rem' },
+      generateBtn: { width: '100%', padding: '1rem', background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(139, 90, 43, 0.3) 100%)', border: '1px solid rgba(212, 175, 55, 0.5)', borderRadius: '8px', color: '#d4af37', fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem', cursor: 'pointer' },
+      startQuizBtn: { display: 'block', margin: '2rem auto', padding: '1rem 3rem', background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(139, 90, 43, 0.3) 100%)', border: '1px solid rgba(212, 175, 55, 0.5)', borderRadius: '12px', color: '#d4af37', fontFamily: "'Cormorant Garamond', serif", fontSize: '1.3rem', cursor: 'pointer' },
+      quizProgress: { textAlign: 'center', color: '#d4af37', marginBottom: '1.5rem', fontSize: '1rem' },
+      quizQuestion: { fontFamily: "'Crimson Pro', serif", fontSize: '1.3rem', color: '#e8e4e0', lineHeight: 1.6, marginBottom: '1rem', textAlign: 'center' },
+      quizHint: { textAlign: 'center', color: 'rgba(232, 228, 224, 0.5)', fontStyle: 'italic', marginBottom: '1.5rem' },
+      quizAnswer: { textAlign: 'center', padding: '1.5rem', background: 'rgba(212, 175, 55, 0.1)', borderRadius: '12px', marginBottom: '1.5rem' },
+      answerLabel: { fontSize: '0.85rem', color: 'rgba(212, 175, 55, 0.7)', marginBottom: '0.5rem' },
+      answerText: { fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', color: '#d4af37' },
+      quizButtons: { display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' },
+      quizBtnReveal: { padding: '0.75rem 2rem', borderRadius: '8px', background: 'rgba(212, 175, 55, 0.2)', border: '1px solid rgba(212, 175, 55, 0.4)', color: '#d4af37', cursor: 'pointer', fontSize: '1rem' },
+      quizBtnCorrect: { padding: '0.75rem 2rem', borderRadius: '8px', background: 'rgba(76, 175, 80, 0.2)', border: '1px solid rgba(76, 175, 80, 0.4)', color: '#81c784', cursor: 'pointer', fontSize: '1rem' },
+      quizBtnIncorrect: { padding: '0.75rem 2rem', borderRadius: '8px', background: 'rgba(244, 67, 54, 0.2)', border: '1px solid rgba(244, 67, 54, 0.4)', color: '#e57373', cursor: 'pointer', fontSize: '1rem' },
+      emptyState: { textAlign: 'center', padding: '3rem', color: 'rgba(232, 228, 224, 0.5)' },
+      modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '2rem' },
+      modalContent: { background: 'linear-gradient(145deg, rgba(30, 25, 35, 0.98) 0%, rgba(20, 18, 25, 0.98) 100%)', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '16px', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto', padding: '2rem', position: 'relative', width: '100%' },
+      modalClose: { position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', color: 'rgba(232, 228, 224, 0.6)', fontSize: '1.5rem', cursor: 'pointer' }
+    };
+
+    ReactDOM.render(<OthelloStudyCompanion />, document.getElementById('root'));
+  </script>
+</body>
+</html>

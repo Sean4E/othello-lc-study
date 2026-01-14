@@ -476,6 +476,448 @@ const LITERARY_TECHNIQUES = [
   { name: "Asides", definition: "Brief comments to the audience that other characters don't hear", examples: ["Iago's commentary on his own plotting"], significance: "Creates complicity between Iago and audience" }
 ];
 
+// KEY EXCERPTS - Original Shakespeare with Modern Translations
+// These are the most important passages for LC study
+const PLAY_TEXT = {
+  "1.1": {
+    title: "Act 1, Scene 1 - Key Excerpts",
+    setting: "Venice. A street at night.",
+    excerpts: [
+      {
+        speaker: "IAGO",
+        lines: "1-6",
+        original: "'Sblood, but you will not hear me:\nIf ever I did dream of such a matter, Abhor me.",
+        modern: "By God's blood, you won't listen to me! If I ever even dreamed of such a thing, hate me.",
+        significance: "Opening establishes Iago's relationship with Roderigo and his ability to manipulate."
+      },
+      {
+        speaker: "IAGO",
+        lines: "41-65",
+        original: "Three great ones of the city,\nIn personal suit to make me his lieutenant,\nOff-capp'd to him: and, by the faith of man,\nI know my price, I am worth no worse a place:\nBut he, as loving his own pride and purposes,\nEvades them, with a bombast circumstance\nHorribly stuff'd with epithets of war;\nAnd, in conclusion,\nNonsuits my mediators; for, 'Certes,' says he,\n'I have already chose my officer.'\nAnd what was he?\nForsooth, a great arithmetician,\nOne Michael Cassio, a Florentine,\nA fellow almost damn'd in a fair wife;\nThat never set a squadron in the field,\nNor the division of a battle knows\nMore than a spinster.",
+        modern: "Three important men of the city personally asked him to make me his lieutenant. They took off their caps to him respectfully. And by my faith as a man, I know my worth - I deserve no less a position. But he, loving his own pride and purposes, avoided them with pompous military jargon. And in the end he rejected my supporters. 'Certainly,' he says, 'I have already chosen my officer.' And who was it? Some bookkeeper, one Michael Cassio from Florence, a man who's barely kept a woman, who never led soldiers in the field, who knows no more about war tactics than a housewife.",
+        significance: "Reveals Iago's motivation - professional jealousy over Cassio's promotion. Note his contempt for Cassio's theoretical knowledge versus his own practical experience."
+      },
+      {
+        speaker: "IAGO",
+        lines: "65-67",
+        original: "I am not what I am.",
+        modern: "I am not what I appear to be.",
+        significance: "THE KEY QUOTE. Inverts God's 'I am that I am' from Exodus. Establishes Iago's fundamental deception and possibly diabolical nature."
+      },
+      {
+        speaker: "IAGO",
+        lines: "88-91",
+        original: "Even now, now, very now, an old black ram\nIs tupping your white ewe. Arise, arise;\nAwake the snorting citizens with the bell,\nOr else the devil will make a grandsire of you.",
+        modern: "Right now, at this very moment, an old black ram is having sex with your white lamb. Get up! Wake the snoring citizens with the alarm bell, or the devil will make you a grandfather.",
+        significance: "Racist and bestial imagery reduces Othello and Desdemona's love to animal sexuality. Black/white contrast emphasises racial otherness."
+      },
+      {
+        speaker: "BRABANTIO",
+        lines: "170-175",
+        original: "O thou foul thief, where hast thou stow'd my daughter?\nDamn'd as thou art, thou hast enchanted her;\nFor I'll refer me to all things of sense,\nIf she in chains of magic were not bound,\nWhether a maid so tender, fair and happy,\nSo opposite to marriage that she shunn'd\nThe wealthy curled darlings of our nation,\nWould ever have, to incur a general mock,\nRun from her guardage to the sooty bosom\nOf such a thing as thou, to fear, not to delight.",
+        modern: "You foul thief! Where have you hidden my daughter? Damned as you are, you must have bewitched her. I appeal to common sense - if she weren't bound by magic spells, would a girl so tender, beautiful and happy, so opposed to marriage that she refused the wealthy, curly-haired darlings of our nation, would she ever have run from my protection to the sooty chest of a thing like you - something to fear, not to delight in?",
+        significance: "Brabantio's accusation of witchcraft reflects racist assumptions. Note 'thing' dehumanises Othello."
+      }
+    ]
+  },
+  "1.2": {
+    title: "Act 1, Scene 2 - Key Excerpts",
+    setting: "Venice. Before the Sagittary inn.",
+    excerpts: [
+      {
+        speaker: "OTHELLO",
+        lines: "17-24",
+        original: "Let him do his spite:\nMy services which I have done the signiory\nShall out-tongue his complaints. 'Tis yet to know,—\nWhich, when I know that boasting is an honour,\nI shall promulgate—I fetch my life and being\nFrom men of royal siege, and my demerits\nMay speak unbonneted to as proud a fortune\nAs this that I have reach'd.",
+        modern: "Let him do his worst. My services to the state will outweigh his complaints. Though I don't like to boast, when I must I'll reveal that I come from men of royal rank, and my merits can speak without cap-in-hand to any fortune as great as the one I've achieved.",
+        significance: "First speech showing Othello's dignity and confidence. His noble bearing contradicts the racist imagery of Scene 1."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "25-28",
+        original: "For know, Iago,\nBut that I love the gentle Desdemona,\nI would not my unhoused free condition\nPut into circumscription and confine\nFor the sea's worth.",
+        modern: "Iago, know this - if it weren't that I love gentle Desdemona, I wouldn't give up my free bachelor life for all the treasures of the sea.",
+        significance: "Shows the depth of Othello's love - he's given up his freedom only for Desdemona."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "59-62",
+        original: "Keep up your bright swords, for the dew will rust them.\nGood signior, you shall more command with years\nThan with your weapons.",
+        modern: "Put away your shining swords - the dew will rust them. Good sir, you command more respect through your age than through your weapons.",
+        significance: "Othello's calm authority. He defuses violence with dignity - the opposite of what racist imagery suggested."
+      }
+    ]
+  },
+  "1.3": {
+    title: "Act 1, Scene 3 - Key Excerpts",
+    setting: "Venice. The Duke's council chamber.",
+    excerpts: [
+      {
+        speaker: "OTHELLO",
+        lines: "76-94",
+        original: "Most potent, grave, and reverend signiors,\nMy very noble and approved good masters,\nThat I have ta'en away this old man's daughter,\nIt is most true; true, I have married her:\nThe very head and front of my offending\nHath this extent, no more. Rude am I in my speech,\nAnd little blest with the soft phrase of peace:\nFor since these arms of mine had seven years' pith,\nTill now some nine moons wasted, they have used\nTheir dearest action in the tented field,\nAnd little of this great world can I speak,\nMore than pertains to feats of broil and battle,\nAnd therefore little shall I grace my cause\nIn speaking for myself.",
+        modern: "Most powerful, grave, and respected lords, my very noble and proven good masters: that I have taken away this old man's daughter is quite true - I have married her. That is the full extent of my offence, no more. I am rough in my speech, not blessed with smooth, peaceful words. Since I was seven years old, until nine months ago, my arms have been used for military action in the battlefield. I can speak little of this great world except what relates to fighting and battle. Therefore I won't do myself justice in speaking for myself.",
+        significance: "Othello's famous 'apology' for his speech - profoundly ironic since the speech itself is eloquent. His military identity dominates."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "128-170",
+        original: "Her father loved me; oft invited me;\nStill question'd me the story of my life,\nFrom year to year, the battles, sieges, fortunes,\nThat I have passed.\nI ran it through, even from my boyish days,\nTo the very moment that he bade me tell it;\nWherein I spake of most disastrous chances,\nOf moving accidents by flood and field\nOf hair-breadth scapes i' the imminent deadly breach,\nOf being taken by the insolent foe\nAnd sold to slavery, of my redemption thence\nAnd portance in my travels' history:\nWherein of antres vast and deserts idle,\nRough quarries, rocks and hills whose heads touch heaven\nIt was my hint to speak,—such was the process;\nAnd of the Cannibals that each other eat,\nThe Anthropophagi and men whose heads\nDo grow beneath their shoulders. This to hear\nWould Desdemona seriously incline.",
+        modern: "Her father loved me and often invited me. He kept asking me about my life story - year by year, the battles, sieges, and fortunes I'd experienced. I told him everything from my boyhood days to the moment he asked. I spoke of terrible disasters, of thrilling adventures by sea and land, of hairbreadth escapes from deadly danger, of being captured by arrogant enemies and sold into slavery, of my release and behavior during my travels. I spoke of vast caves and empty deserts, rough quarries, rocks and hills that touched the sky. And of the Cannibals who eat each other, and men whose heads grow beneath their shoulders. Desdemona would listen intently to all this.",
+        significance: "The storytelling that won Desdemona - romantic but also exoticising. Does she love him or his stories?"
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "167-170",
+        original: "She loved me for the dangers I had passed,\nAnd I loved her that she did pity them.\nThis only is the witchcraft I have used.",
+        modern: "She loved me for the dangers I had experienced, and I loved her because she pitied me for them. This is the only witchcraft I've used.",
+        significance: "CRUCIAL QUOTE. Their love is built on storytelling and sympathy. Is this real intimacy or romantic fantasy?"
+      },
+      {
+        speaker: "DESDEMONA",
+        lines: "180-189",
+        original: "My noble father,\nI do perceive here a divided duty:\nTo you I am bound for life and education;\nMy life and education both do learn me\nHow to respect you; you are the lord of duty;\nI am hitherto your daughter: but here's my husband,\nAnd so much duty as my mother show'd\nTo you, preferring you before her father,\nSo much I challenge that I may profess\nDue to the Moor my lord.",
+        modern: "My noble father, I see that I have a divided duty here. To you I owe my life and upbringing - they have taught me how to respect you. You are my duty's master, and I have been your daughter up to now. But here is my husband. And just as much duty as my mother showed you by preferring you over her own father, that much duty I now owe to Othello, my lord.",
+        significance: "Desdemona's diplomatic speech shows intelligence and courage. She asserts her choice while respecting her father."
+      },
+      {
+        speaker: "DESDEMONA",
+        lines: "253-256",
+        original: "I saw Othello's visage in his mind,\nAnd to his honour and his valiant parts\nDid I my soul and fortunes consecrate.",
+        modern: "I saw Othello's true face in his mind and character. To his honour and brave qualities I dedicated my soul and future.",
+        significance: "She loves who he IS, not his appearance. But does she truly know him, or an idealised version?"
+      },
+      {
+        speaker: "BRABANTIO",
+        lines: "293-294",
+        original: "Look to her, Moor, if thou hast eyes to see:\nShe has deceived her father, and may thee.",
+        modern: "Watch her, Moor, if you can see clearly: she deceived her father, and may deceive you too.",
+        significance: "Brabantio's bitter warning - Iago will twist this later. The 'deception' was actually choosing love over duty."
+      },
+      {
+        speaker: "IAGO",
+        lines: "383-404",
+        original: "Thus do I ever make my fool my purse:\nFor I mine own gain'd knowledge should profane,\nIf I would time expend with such a snipe.\nBut for my sport and profit. I hate the Moor:\nAnd it is thought abroad, that 'twixt my sheets\nHe has done my office: I know not if't be true;\nBut I, for mere suspicion in that kind,\nWill do as if for surety. He holds me well;\nThe better shall my purpose work on him...\nCassio's a proper man: let me see now:\nTo get his place and to plume up my will\nIn double knavery—How, how? Let's see:—\nAfter some time, to abuse Othello's ear\nThat he is too familiar with his wife.",
+        modern: "This is how I always make my fool my cash source. I'd be wasting my knowledge if I spent time with such an idiot except for fun and profit. I hate the Moor. And it's rumored that he's slept with my wife. I don't know if it's true, but on mere suspicion I'll act as if it were certain. He trusts me completely - the better for my plan to work on him... Cassio is a handsome man. Let me see: to take his position and advance my own schemes through double treachery - how? Let me see: after some time, I'll poison Othello's ear that Cassio is too friendly with his wife.",
+        significance: "Iago's soliloquy reveals his plan. Note multiple motives given (hate, sexual jealousy). Are they reasons or rationalizations?"
+      },
+      {
+        speaker: "IAGO",
+        lines: "404-406",
+        original: "The Moor is of a free and open nature,\nThat thinks men honest that but seem to be so,\nAnd will as tenderly be led by the nose\nAs asses are.",
+        modern: "The Moor has a free and open nature. He thinks men are honest simply because they appear to be. He'll be as easily led by the nose as donkeys are.",
+        significance: "Iago's cold assessment of Othello's trusting nature as a weakness to exploit."
+      }
+    ]
+  },
+  "2.1": {
+    title: "Act 2, Scene 1 - Key Excerpts",
+    setting: "Cyprus. A sea-port.",
+    excerpts: [
+      {
+        speaker: "CASSIO",
+        lines: "68-77",
+        original: "Tempests themselves, high seas and howling winds,\nThe gutter'd rocks and congregated sands,—\nTraitors ensteep'd to clog the guiltless keel,—\nAs having sense of beauty, do omit\nTheir mortal natures, letting go safely by\nThe divine Desdemona.",
+        modern: "The storms themselves, the high seas and howling winds, the jagged rocks and gathered sands - traitors lying in wait to damage innocent ships - all seemed to sense her beauty and abandoned their deadly natures, letting divine Desdemona pass safely.",
+        significance: "Cassio's courtly, worshipful language toward Desdemona - innocent but later used by Iago as 'evidence'."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "186-193",
+        original: "O my soul's joy!\nIf after every tempest come such calms,\nMay the winds blow till they have waken'd death!\nAnd let the labouring bark climb hills of seas\nOlympus-high and duck again as low\nAs hell's from heaven! If it were now to die,\n'Twere now to be most happy; for, I fear,\nMy soul hath her content so absolute\nThat not another comfort like to this\nSucceeds in unknown fate.",
+        modern: "Oh joy of my soul! If such calm follows every storm, may the winds blow until they wake death! Let the struggling ship climb waves as high as Mount Olympus and dive as low as hell is from heaven! If I were to die now, this would be the happiest moment. I fear my soul is so completely content that no other joy like this will come in my unknown future.",
+        significance: "Othello's joyful reunion - but the speech foreshadows tragedy. 'If it were now to die' becomes grimly prophetic."
+      },
+      {
+        speaker: "IAGO",
+        lines: "199-200",
+        original: "O, you are well tuned now!\nBut I'll set down the pegs that make this music,\nAs honest as I am.",
+        modern: "Oh, you are in perfect harmony now! But I'll loosen the tuning pegs that make this music, as honest as I am.",
+        significance: "Musical metaphor shows Iago's intention to destroy their harmony. Ironic use of 'honest'."
+      }
+    ]
+  },
+  "2.3": {
+    title: "Act 2, Scene 3 - Key Excerpts",
+    setting: "Cyprus. A hall in the castle.",
+    excerpts: [
+      {
+        speaker: "IAGO",
+        lines: "47-52",
+        original: "If I can fasten but one cup upon him,\nWith that which he hath drunk to-night already,\nHe'll be as full of quarrel and offence\nAs my young mistress' dog.",
+        modern: "If I can just get one more cup into him, on top of what he's already drunk tonight, he'll be as full of argument and aggression as my young mistress's dog.",
+        significance: "Iago's calculated plan to exploit Cassio's weakness for alcohol."
+      },
+      {
+        speaker: "CASSIO",
+        lines: "264-273",
+        original: "Reputation, reputation, reputation! O, I have lost\nmy reputation! I have lost the immortal part of\nmyself, and what remains is bestial. My reputation,\nIago, my reputation!",
+        modern: "Reputation, reputation, reputation! Oh, I have lost my reputation! I have lost the immortal part of myself, and what remains is bestial. My reputation, Iago, my reputation!",
+        significance: "Cassio's despair at losing his position. The triple repetition emphasises the importance of reputation in this society."
+      },
+      {
+        speaker: "IAGO",
+        lines: "274-278",
+        original: "Reputation is an idle and most false imposition: oft\ngot without merit, and lost without deserving: you\nhave lost no reputation at all, unless you repute\nyourself such a loser.",
+        modern: "Reputation is an empty and mostly false idea - often gained without merit and lost without deserving. You haven't lost any reputation at all, unless you think of yourself as a loser.",
+        significance: "Iago cynically dismisses reputation while planning to manipulate others' concern for it. His own reputation as 'honest' is his weapon."
+      },
+      {
+        speaker: "IAGO",
+        lines: "330-356",
+        original: "I'll pour this pestilence into his ear,\nThat she repeals him for her body's lust;\nAnd by how much she strives to do him good,\nShe shall undo her credit with the Moor.\nSo will I turn her virtue into pitch,\nAnd out of her own goodness make the net\nThat shall enmesh them all.",
+        modern: "I'll pour this poison into his ear - that she's trying to get Cassio reinstated because she lusts for him. And the more she tries to do Cassio good, the more she'll damage her reputation with the Moor. I'll turn her virtue into tar, and out of her own goodness make the net that will trap them all.",
+        significance: "Iago's soliloquy reveals his method: turning Desdemona's virtues into 'evidence' of guilt. Her goodness becomes the trap."
+      }
+    ]
+  },
+  "3.3": {
+    title: "Act 3, Scene 3 - The Temptation Scene",
+    setting: "Cyprus. The garden of the castle.",
+    excerpts: [
+      {
+        speaker: "IAGO",
+        lines: "35",
+        original: "Ha! I like not that.",
+        modern: "Ha! I don't like that.",
+        significance: "Four words that begin Othello's destruction. Iago plants the first seed of suspicion."
+      },
+      {
+        speaker: "IAGO",
+        lines: "93-101",
+        original: "Did Michael Cassio, when you woo'd my lady,\nKnow of your love?",
+        modern: "Did Michael Cassio know about your love when you were courting my lady?",
+        significance: "Iago's question implies a previous relationship. He plants suspicion through innocent-seeming questions."
+      },
+      {
+        speaker: "IAGO",
+        lines: "121-124",
+        original: "I am glad of it; for now I shall have reason\nTo show the love and duty that I bear you\nWith franker spirit: therefore, as I am bound,\nReceive it from me. I speak not yet of proof.",
+        modern: "I'm glad of it, because now I have reason to show you the love and duty I feel for you more openly. Therefore, as I'm obliged to, accept this from me. I don't speak yet of proof.",
+        significance: "Iago positions himself as a reluctant truth-teller, bound by loyalty to speak despite his reservations."
+      },
+      {
+        speaker: "IAGO",
+        lines: "165-170",
+        original: "O, beware, my lord, of jealousy;\nIt is the green-eyed monster which doth mock\nThe meat it feeds on; that cuckold lives in bliss\nWho, certain of his fate, loves not his wronger;\nBut, O, what damned minutes tells he o'er\nWho dotes, yet doubts, suspects, yet strongly loves!",
+        modern: "Oh, beware, my lord, of jealousy! It is the green-eyed monster that mocks the meat it feeds on. The cuckold who knows his fate for certain and doesn't love the woman who wronged him lives in bliss. But oh, what damned minutes the man counts who loves deeply yet doubts, suspects yet strongly loves!",
+        significance: "THE FAMOUS SPEECH. By warning against jealousy, Iago creates it. The 'green-eyed monster' has entered common language."
+      },
+      {
+        speaker: "IAGO",
+        lines: "232-238",
+        original: "I know our country disposition well;\nIn Venice they do let heaven see the pranks\nThey dare not show their husbands; their best conscience\nIs not to leave't undone, but keep't unknown.",
+        modern: "I know the character of our country well. In Venice they let heaven see the tricks they dare not show their husbands. Their idea of conscience is not to leave it undone, but to keep it hidden.",
+        significance: "Iago uses cultural prejudice - Venetian women are supposedly more deceptive. He exploits Othello's outsider status."
+      },
+      {
+        speaker: "IAGO",
+        lines: "229-234",
+        original: "She did deceive her father, marrying you;\nAnd when she seem'd to shake and fear your looks,\nShe loved them most.",
+        modern: "She did deceive her father by marrying you. And when she seemed to tremble and fear your appearance, she loved it most.",
+        significance: "Iago twists Brabantio's warning. Desdemona's 'deception' of her father becomes evidence she could deceive Othello."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "258-275",
+        original: "Haply, for I am black\nAnd have not those soft parts of conversation\nThat chamberers have, or for I am declined\nInto the vale of years,—yet that's not much—\nShe's gone. I am abused; and my relief\nMust be to loathe her. O curse of marriage,\nThat we can call these delicate creatures ours,\nAnd not their appetites! I had rather be a toad,\nAnd live upon the vapour of a dungeon,\nThan keep a corner in the thing I love\nFor others' uses.",
+        modern: "Perhaps because I am black and don't have those smooth social skills that courtiers have, or because I'm getting old - though that's not so much. She's gone. I've been deceived, and my only relief will be to hate her. Oh, curse of marriage - that we can call these delicate creatures ours but not their desires! I'd rather be a toad living on the vapour of a dungeon than keep a corner in the thing I love for others' use.",
+        significance: "CRITICAL PASSAGE. Othello internalises racism, seeing his blackness and age as deficiencies. He begins to dehumanise Desdemona ('thing')."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "386-392",
+        original: "Her name, that was as fresh\nAs Dian's visage, is now begrimed and black\nAs mine own face. If there be cords, or knives,\nPoison, or fire, or suffocating streams,\nI'll not endure it.",
+        modern: "Her name, that was as fresh as the face of Diana, goddess of chastity, is now dirty and black as my own face. If there are ropes, or knives, poison, fire, or drowning streams - I won't endure it.",
+        significance: "Othello uses his own blackness as a metaphor for corruption. He has completely absorbed racist thinking."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "360-365",
+        original: "Villain, be sure thou prove my love a whore,\nBe sure of it; give me the ocular proof:\nOr by the worth of man's eternal soul,\nThou hadst been better have been born a dog\nThan answer my waked wrath!",
+        modern: "Villain, be sure you prove my love is a whore. Be sure of it - give me visible proof! Or by the worth of man's eternal soul, you'd have been better born a dog than to face my awakened fury!",
+        significance: "Othello demands 'ocular proof' - visual evidence. Ironically, his eyes will deceive him throughout."
+      },
+      {
+        speaker: "IAGO",
+        lines: "407-423",
+        original: "I lay with Cassio lately;\nAnd, being troubled with a raging tooth,\nI could not sleep.\nThere are a kind of men so loose of soul,\nThat in their sleeps will mutter their affairs:\nOne of this kind is Cassio:\nIn sleep I heard him say 'Sweet Desdemona,\nLet us be wary, let us hide our loves;'\nAnd then, sir, would he gripe and wring my hand,\nCry 'O sweet creature!' and then kiss me hard,\nAs if he pluck'd up kisses by the roots\nThat grew upon my lips: then laid his leg\nOver my thigh, and sigh'd, and kiss'd.",
+        modern: "I slept beside Cassio recently, and because I had a terrible toothache, I couldn't sleep. There are men so careless that they talk about their affairs in their sleep. Cassio is one of these. In his sleep I heard him say 'Sweet Desdemona, let us be careful, let us hide our love.' Then, sir, he would grip and squeeze my hand, cry 'Oh sweet creature!' and kiss me hard, as if plucking up kisses by the roots from my lips. Then he laid his leg over my thigh, sighed, and kissed me.",
+        significance: "Iago invents a dream to provide 'evidence'. The detail and intimacy make it convincing. Pure fabrication."
+      },
+      {
+        speaker: "IAGO",
+        lines: "431-436",
+        original: "Trifles light as air\nAre to the jealous confirmations strong\nAs proofs of holy writ.",
+        modern: "Things as light as air are to the jealous as strong as the proofs of holy scripture.",
+        significance: "Iago describes how jealousy distorts perception. The handkerchief will be such a 'trifle'."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "453-460",
+        original: "O, blood, blood, blood!\nNever, Iago: Like to the Pontic sea,\nWhose icy current and compulsive course\nNe'er feels retiring ebb, but keeps due on\nTo the Propontic and the Hellespont,\nEven so my bloody thoughts, with violent pace,\nShall ne'er look back, ne'er ebb to humble love,\nTill that a capable and wide revenge\nSwallow them up.",
+        modern: "Oh, blood, blood, blood! Never, Iago. Like the Black Sea, whose icy current and powerful course never retreats but keeps flowing on to the Sea of Marmara and the Dardanelles - just so my bloody thoughts, with violent pace, will never look back, never return to humble love, until a sufficient and wide revenge swallows them up.",
+        significance: "Othello's language becomes violent and unstoppable, like the sea he describes. He commits to revenge."
+      },
+      {
+        speaker: "IAGO",
+        lines: "469-476",
+        original: "I am your own for ever.",
+        modern: "I am yours forever.",
+        significance: "The scene ends with Iago's fake declaration of loyalty - a perverse wedding vow."
+      }
+    ]
+  },
+  "3.4": {
+    title: "Act 3, Scene 4 - Key Excerpts",
+    setting: "Before the castle.",
+    excerpts: [
+      {
+        speaker: "OTHELLO",
+        lines: "55-73",
+        original: "That handkerchief\nDid an Egyptian to my mother give;\nShe was a charmer, and could almost read\nThe thoughts of people: she told her, while she kept it,\n'Twould make her amiable and subdue my father\nEntirely to her love, but if she lost it\nOr made gift of it, my father's eye\nShould hold her loathed and his spirits should hunt\nAfter new fancies: she, dying, gave it me;\nAnd bid me, when my fate would have me wive,\nTo give it her. I did so: and take heed on't;\nMake it a darling like your precious eye;\nTo lose't or give't away were such perdition\nAs nothing else could match.",
+        modern: "An Egyptian woman gave that handkerchief to my mother. She was a fortune-teller who could almost read people's thoughts. She told my mother that while she kept it, it would make her lovable and keep my father entirely devoted to her love. But if she lost it or gave it away, my father would loathe her and his heart would chase after new interests. Dying, she gave it to me and told me, when fate had me marry, to give it to my wife. I did so. Take care of it - make it precious like your own eye. To lose it or give it away would be a disaster like nothing else.",
+        significance: "Othello creates (or relates) a magical history for the handkerchief. It represents their love - if lost, love is lost."
+      }
+    ]
+  },
+  "4.1": {
+    title: "Act 4, Scene 1 - Key Excerpts",
+    setting: "Before the castle.",
+    excerpts: [
+      {
+        speaker: "OTHELLO",
+        lines: "1-44",
+        original: "Lie with her! lie on her! We say lie on her, when\nthey belie her. Lie with her! that's fulsome.\n--Handkerchief--confessions--handkerchief!--To\nconfess, and be hanged for his labour;--first, to be\nhanged, and then to confess.--I tremble at it...\nIt is not words that shake me thus. Pish! Noses,\nears, and lips.--Loss't possible?--Confess--Loss\nhandkerchief!--O devil!",
+        modern: "Sleep with her! Lie on top of her! We say 'lie on her' when we mean 'slander her.' Sleep with her! That's disgusting. Handkerchief - confessions - handkerchief! To confess and be hanged for his effort - first hanged, then confess. I tremble at it... It's not words that shake me so. Pah! Noses, ears, lips. Is it possible? Confess - handkerchief! Oh devil!",
+        significance: "Othello's language breaks down into fragments as jealousy overwhelms rational thought. He falls into an epileptic fit."
+      },
+      {
+        speaker: "IAGO",
+        lines: "93-104",
+        original: "Stand you awhile apart;\nConfine yourself but in a patient list.\nWhilst you were here o'erwhelmed with your grief--\nA passion most unsuiting such a man--\nCassio came hither: I shifted him away,\nAnd laid good 'scuse upon your ecstasy,\nBade him anon return and here speak with me;\nThe which he promised. Do but encave yourself,\nAnd mark the fleers, the gibes, and notable scorns,\nThat dwell in every region of his face;\nFor I will make him tell the tale anew,\nWhere, how, how oft, how long ago, and when\nHe hath, and is again to cope your wife.",
+        modern: "Stand aside for a while. Control yourself within patient limits. While you were here overcome with grief - an emotion very unsuitable for such a man - Cassio came here. I sent him away and made good excuses for your fit. I told him to return soon and speak with me, which he promised. Just hide yourself and observe the sneers, the jokes, and obvious scorn that show in every part of his face. I'll make him tell the story again - where, how, how often, how long ago, and when he has had and will again have sex with your wife.",
+        significance: "Iago sets up the eavesdropping scene - but he'll actually ask Cassio about Bianca while Othello thinks they discuss Desdemona."
+      }
+    ]
+  },
+  "4.2": {
+    title: "Act 4, Scene 2 - Key Excerpts",
+    setting: "A room in the castle.",
+    excerpts: [
+      {
+        speaker: "DESDEMONA",
+        lines: "152-156",
+        original: "Unkindness may do much;\nAnd his unkindness may defeat my life,\nBut never taint my love. I cannot say 'whore:'\nIt does abhor me now I speak the word;\nTo do the act that might the addition earn\nNot the world's mass of vanity could make me.",
+        modern: "Unkindness can do much, and his unkindness may destroy my life, but it will never taint my love. I cannot say 'whore' - the word disgusts me to speak it. To do the act that might earn that title, not all the world's wealth could make me.",
+        significance: "Desdemona's absolute love even in the face of cruelty. She cannot even say the word 'whore'."
+      }
+    ]
+  },
+  "4.3": {
+    title: "Act 4, Scene 3 - Key Excerpts",
+    setting: "Another room in the castle.",
+    excerpts: [
+      {
+        speaker: "DESDEMONA",
+        lines: "41-57",
+        original: "The poor soul sat sighing by a sycamore tree,\nSing all a green willow:\nHer hand on her bosom, her head on her knee,\nSing willow, willow, willow:\nThe fresh streams ran by her, and murmur'd her moans;\nSing willow, willow, willow;\nHer salt tears fell from her, and soften'd the stones;\n—\nLay by these:—\nSing willow, willow, willow;\nPrithee, hie thee; he'll come anon:—\nSing all a green willow must be my garland.\nLet nobody blame him; his scorn I approve,—\nNay, that's not next.—Hark! who is't that knocks?",
+        modern: "[THE WILLOW SONG] The poor soul sat sighing by a sycamore tree, / Sing all a green willow. / Her hand on her breast, her head on her knee, / Sing willow, willow, willow. / The fresh streams ran by her and echoed her moans, / Sing willow, willow, willow. / Her salt tears fell from her and softened the stones. / [Interrupting herself] Put these aside. Sing willow, willow, willow. / Please hurry; he'll come soon. / Sing all a green willow must be my garland. / Let nobody blame him; I approve of his scorn— / No, that's not next. Hark! Who's that knocking?",
+        significance: "The Willow Song foreshadows Desdemona's death. She identifies with Barbara, a woman abandoned by her lover."
+      },
+      {
+        speaker: "EMILIA",
+        lines: "84-103",
+        original: "But I do think it is their husbands' faults\nIf wives do fall: say that they slack their duties,\nAnd pour our treasures into foreign laps,\nOr else break out in peevish jealousies,\nThrowing restraint upon us; or say they strike us,\nOr scant our former having in despite;\nWhy, we have galls, and though we have some grace,\nYet have we some revenge. Let husbands know\nTheir wives have sense like them: they see and smell\nAnd have their palates both for sweet and sour,\nAs husbands have. What is it that they do\nWhen they change us for others? Is it sport?\nI think it is: and doth affection breed it?\nI think it doth: is't frailty that thus errs?\nIt is so too: and have not we affections,\nDesires for sport, and frailty, as men have?\nThen let them use us well: else let them know,\nThe ills we do, their ills instruct us so.",
+        modern: "But I think it's husbands' fault if wives fall. Say they neglect their duties and give our treasures to other women, or break out in petty jealousies restraining us, or say they hit us, or reduce our allowances out of spite - why, we have tempers, and though we have some grace, we also want revenge. Let husbands know their wives have feelings like them: they see, smell, and taste both sweet and sour, just as husbands do. What is it that men do when they cheat on us? Is it for fun? I think so. Does passion cause it? I think so. Is it weakness that makes them err? That too. And don't we have passions, desires for fun, and weakness, as men do? Then let them treat us well, or let them know the wrongs we do are taught by their wrongs.",
+        significance: "Emilia's PROTO-FEMINIST SPEECH. She argues women are equal to men in feelings and desires. Revolutionary for its time."
+      }
+    ]
+  },
+  "5.2": {
+    title: "Act 5, Scene 2 - The Murder and Resolution",
+    setting: "A bedchamber in the castle. Desdemona in bed asleep.",
+    excerpts: [
+      {
+        speaker: "OTHELLO",
+        lines: "1-22",
+        original: "It is the cause, it is the cause, my soul,—\nLet me not name it to you, you chaste stars!—\nIt is the cause. Yet I'll not shed her blood;\nNor scar that whiter skin of hers than snow,\nAnd smooth as monumental alabaster.\nYet she must die, else she'll betray more men.\nPut out the light, and then put out the light:\nIf I quench thee, thou flaming minister,\nI can again thy former light restore,\nShould I repent me: but once put out thy light,\nThou cunning'st pattern of excelling nature,\nI know not where is that Promethean heat\nThat can thy light relume. When I have pluck'd the rose,\nI cannot give it vital growth again.\nIt must needs wither: I'll smell it on the tree.\nKissing her\nAh balmy breath, that dost almost persuade\nJustice to break her sword! One more, one more.\nBe thus when thou art dead, and I will kill thee,\nAnd love thee after. One more, and this the last.",
+        modern: "It is the cause, it is the cause, my soul - let me not name it to you, you chaste stars. It is the cause. Yet I won't shed her blood or scar her skin, whiter than snow and smooth as alabaster on a tomb. Yet she must die, or she'll betray more men. Put out the light, and then put out the light: if I extinguish you, candle flame, I can restore your light again if I change my mind. But once I put out your light, you most beautiful creation of nature, I don't know where to find the divine fire that can relight you. When I have plucked the rose, I cannot make it grow again - it must wither. I'll smell it on the tree. [Kisses her] Ah, sweet breath, that almost persuades Justice to break her sword! One more kiss, one more. Be like this when you are dead, and I will kill you and love you afterwards. One more, and this is the last.",
+        significance: "CRITICAL SPEECH. Othello cannot name what he's about to do ('the cause'). The double 'put out the light' refers to candle and life. His love persists even as he murders."
+      },
+      {
+        speaker: "DESDEMONA",
+        lines: "33-38",
+        original: "Talk you of killing?\nAlas, why gnaw you so your nether lip?\nSome bloody passion shakes your very frame:\nThese are portents; but yet I hope, I hope,\nThey do not point on me.",
+        modern: "Are you talking about killing? Alas, why are you biting your lower lip? Some bloody passion shakes your whole body. These are terrible signs - but still I hope, I hope, they don't point at me.",
+        significance: "Desdemona senses death approaching. Her repeated 'I hope' shows fear breaking through."
+      },
+      {
+        speaker: "DESDEMONA",
+        lines: "59-62",
+        original: "And have you mercy too! I never did\nOffend you in my life; never loved Cassio\nBut with such general warranty of heaven\nAs I might love: I never gave him token.",
+        modern: "And have mercy too! I never offended you in my life. I never loved Cassio except with the kind of innocent, heaven-approved love I might feel for anyone. I never gave him any token.",
+        significance: "Desdemona's true defense - she is completely innocent. But Othello cannot hear truth anymore."
+      },
+      {
+        speaker: "DESDEMONA",
+        lines: "125-126",
+        original: "Commend me to my kind lord: O, farewell!",
+        modern: "Give my regards to my kind lord. Oh, farewell!",
+        significance: "Desdemona's dying words still call Othello 'kind' - either ultimate forgiveness or tragic blindness."
+      },
+      {
+        speaker: "EMILIA",
+        lines: "130-131",
+        original: "O, who hath done this deed?",
+        modern: "Oh, who has done this deed?",
+        significance: "Emilia discovers the murder."
+      },
+      {
+        speaker: "DESDEMONA",
+        lines: "132",
+        original: "Nobody; I myself. Farewell.",
+        modern: "Nobody; I myself. Farewell.",
+        significance: "Desdemona's final lie protects Othello. She takes blame for her own murder."
+      },
+      {
+        speaker: "EMILIA",
+        lines: "163-166",
+        original: "I will not charm my tongue; I am bound to speak:\nMy mistress here lies murder'd in her bed,—",
+        modern: "I will not be silent; I am bound to speak. My mistress lies here murdered in her bed—",
+        significance: "Emilia chooses truth over safety. She exposes Iago despite the danger."
+      },
+      {
+        speaker: "EMILIA",
+        lines: "217-220",
+        original: "Moor, she was chaste; she loved thee, cruel Moor;\nSo come my soul to bliss, as I speak true;\nSo speaking as I think, I die, I die.",
+        modern: "Moor, she was chaste. She loved you, cruel Moor. As I hope my soul reaches heaven, I speak the truth. Speaking what I think, I die, I die.",
+        significance: "Emilia's dying vindication of Desdemona. She dies speaking truth."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "340-356",
+        original: "Soft you; a word or two before you go.\nI have done the state some service, and they know't.\nNo more of that. I pray you, in your letters,\nWhen you shall these unlucky deeds relate,\nSpeak of me as I am; nothing extenuate,\nNor set down aught in malice: then must you speak\nOf one that loved not wisely but too well;\nOf one not easily jealous, but being wrought\nPerplexed in the extreme; of one whose hand,\nLike the base Indian, threw a pearl away\nRicher than all his tribe; of one whose subdued eyes,\nAlbeit unused to the melting mood,\nDrop tears as fast as the Arabian trees\nTheir medicinal gum. Set you down this;\nAnd say besides, that in Aleppo once,\nWhere a malignant and a turban'd Turk\nBeat a Venetian and traduced the state,\nI took by the throat the circumcised dog,\nAnd smote him, thus.",
+        modern: "Wait - a word or two before you go. I have done the state some service, and they know it. No more of that. Please, in your letters, when you report these unfortunate events, speak of me as I am - don't excuse anything, and don't set down anything in malice. Then you must speak of one who loved not wisely but too well; of one not easily made jealous, but when worked upon, extremely tormented; of one whose hand, like an ignorant native, threw away a pearl richer than his whole tribe; of one whose subdued eyes, though unused to tears, drop tears as fast as Arabian trees drop their healing resin. Write this down. And say besides that once in Aleppo, where an evil, turbaned Turk beat a Venetian and insulted the state, I took the uncircumcised dog by the throat and killed him - like this. [Stabs himself]",
+        significance: "Othello's final speech attempts to control his legacy. 'Loved not wisely but too well' is partly true, partly self-justifying. He compares himself to both the pearl-throwing savage and the state-defending hero."
+      },
+      {
+        speaker: "OTHELLO",
+        lines: "358-360",
+        original: "I kiss'd thee ere I kill'd thee: no way but this;\nKilling myself, to die upon a kiss.",
+        modern: "I kissed you before I killed you. No way but this - killing myself, to die upon a kiss.",
+        significance: "Othello's final words link love and death. The kiss bookends the relationship from his arrival in Cyprus."
+      },
+      {
+        speaker: "IAGO",
+        lines: "304-305",
+        original: "Demand me nothing: what you know, you know:\nFrom this time forth I never will speak word.",
+        modern: "Ask me nothing. What you know, you know. From now on I will never speak another word.",
+        significance: "Iago's final silence is his last act of control. By refusing to explain, he denies closure forever."
+      }
+    ]
+  }
+};
+
 const CONTEXT = {
   historical: {
     title: "Historical Context",

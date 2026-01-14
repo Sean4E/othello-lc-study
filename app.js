@@ -6,6 +6,12 @@ const { useState, useEffect, useMemo, useRef } = React;
 // SceneCard Component
 function SceneCard({ scene }) {
   const [viewMode, setViewMode] = useState('modern');
+  const [showText, setShowText] = useState(false);
+  const [textViewMode, setTextViewMode] = useState('sideBySide');
+
+  // Get the play text for this scene
+  const sceneKey = `${scene.act}.${scene.scene}`;
+  const playText = PLAY_TEXT[sceneKey];
 
   return (
     <div className="card scene-card">
@@ -48,6 +54,81 @@ function SceneCard({ scene }) {
         <div className="analysis-title">Significance</div>
         <p style={{fontSize: '0.9rem', color: 'rgba(232, 228, 224, 0.8)'}}>{scene.significance}</p>
       </div>
+
+      {/* Shakespeare's Text Section */}
+      {playText && playText.excerpts && playText.excerpts.length > 0 && (
+        <div className="play-text-section">
+          <button
+            className="show-text-btn"
+            onClick={() => setShowText(!showText)}
+          >
+            {showText ? '▼ Hide Shakespeare\'s Text' : '▶ Show Shakespeare\'s Text with Translations'}
+          </button>
+
+          {showText && (
+            <div className="text-excerpts">
+              <div className="text-view-toggle">
+                <button
+                  className={`toggle-btn ${textViewMode === 'sideBySide' ? 'active' : ''}`}
+                  onClick={() => setTextViewMode('sideBySide')}
+                >
+                  Side by Side
+                </button>
+                <button
+                  className={`toggle-btn ${textViewMode === 'originalOnly' ? 'active' : ''}`}
+                  onClick={() => setTextViewMode('originalOnly')}
+                >
+                  Original Only
+                </button>
+                <button
+                  className={`toggle-btn ${textViewMode === 'modernOnly' ? 'active' : ''}`}
+                  onClick={() => setTextViewMode('modernOnly')}
+                >
+                  Modern Only
+                </button>
+              </div>
+
+              {playText.excerpts.map((excerpt, i) => (
+                <div key={i} className="text-excerpt">
+                  <div className="excerpt-header">
+                    <span className="excerpt-speaker">{excerpt.speaker}</span>
+                    <span className="excerpt-lines">Lines {excerpt.lines}</span>
+                  </div>
+
+                  {textViewMode === 'sideBySide' && (
+                    <div className="side-by-side">
+                      <div className="original-text">
+                        <div className="text-label">Original Shakespeare</div>
+                        <div className="text-content">{excerpt.original}</div>
+                      </div>
+                      <div className="modern-text">
+                        <div className="text-label">Modern English</div>
+                        <div className="text-content">{excerpt.modern}</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {textViewMode === 'originalOnly' && (
+                    <div className="single-text original-text">
+                      <div className="text-content">{excerpt.original}</div>
+                    </div>
+                  )}
+
+                  {textViewMode === 'modernOnly' && (
+                    <div className="single-text modern-text">
+                      <div className="text-content">{excerpt.modern}</div>
+                    </div>
+                  )}
+
+                  <div className="excerpt-significance">
+                    <strong>Significance:</strong> {excerpt.significance}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
