@@ -9,9 +9,9 @@ function SceneCard({ scene }) {
   const [showText, setShowText] = useState(false);
   const [textViewMode, setTextViewMode] = useState('sideBySide');
 
-  // Get the play text for this scene
+  // Get the play text for this scene (with safety check)
   const sceneKey = `${scene.act}.${scene.scene}`;
-  const playText = PLAY_TEXT[sceneKey];
+  const playText = typeof PLAY_TEXT !== 'undefined' ? PLAY_TEXT[sceneKey] : null;
 
   return (
     <div className="card scene-card">
