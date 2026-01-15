@@ -1,7 +1,7 @@
 // Othello Study Companion - React Application
 // For standalone browser use with React loaded via CDN
 
-const { useState, useEffect, useMemo, useRef } = React;
+const { useState, useMemo, useRef } = React;
 
 // SceneCard Component
 function SceneCard({ scene }) {
@@ -138,7 +138,8 @@ function OthelloStudyCompanion() {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [selectedTheme, setSelectedTheme] = useState(null);
-  const [selectedScene, setSelectedScene] = useState(null);
+  // Note: selectedScene reserved for future scene detail modal
+  const [selectedScene] = useState(null); // eslint-disable-line no-unused-vars
   const [searchQuery, setSearchQuery] = useState('');
   const [quizMode, setQuizMode] = useState(false);
   const [quizQuestions, setQuizQuestions] = useState([]);
@@ -168,15 +169,15 @@ function OthelloStudyCompanion() {
       }
     });
 
-    // Theme questions
-    Object.values(THEMES).forEach(theme => {
+    // Theme questions - add one standard theme question
+    if (Object.values(THEMES).length > 0) {
       questions.push({
         type: 'theme',
         question: `What theme is represented by the phrase "the green-eyed monster"?`,
         answer: 'Jealousy',
         hint: 'Iago warns Othello about this in Act 3'
       });
-    });
+    }
 
     // Mix and limit
     const shuffled = questions.sort(() => Math.random() - 0.5).slice(0, 15);
@@ -230,38 +231,94 @@ function OthelloStudyCompanion() {
     return results.slice(0, 20);
   }, [searchQuery]);
 
-  // Essay planner
+  // Essay planner state - essayType for future essay type selector
+  const [essayType] = useState('discuss'); // eslint-disable-line no-unused-vars
+
+  // Enhanced Essay planner
   const generateEssayPlan = () => {
     if (!essayTopic.trim()) return;
 
     const topic = essayTopic.toLowerCase();
     const plan = {
       topic: essayTopic,
+      type: essayType,
       introduction: [],
       paragraphs: [],
+      counterArgument: null,
       conclusion: [],
-      relevantQuotes: []
+      relevantQuotes: [],
+      techniques: [],
+      markingCriteria: {
+        purpose: [],
+        coherence: [],
+        language: [],
+        mechanics: []
+      },
+      sentenceStarters: {
+        introduction: [],
+        body: [],
+        conclusion: []
+      },
+      wordCount: { min: 1000, max: 1200 }
     };
 
-    // Find relevant themes
-    Object.values(THEMES).forEach(theme => {
-      if (topic.includes(theme.name.toLowerCase())) {
+    // Detect essay type from question keywords
+    const isAgreeDisagree = topic.includes('agree') || topic.includes('disagree') || topic.includes('to what extent') || topic.includes('discuss this statement');
+    // Character and theme focus detection for future enhanced planning
+    const hasCharacterFocus = topic.includes('character') || Object.values(CHARACTERS).some(c => topic.includes(c.name.toLowerCase()));
+    const hasThemeFocus = Object.values(THEMES).some(t => topic.includes(t.name.toLowerCase()));
+    // Use detected focus for logging/debugging
+    if (hasCharacterFocus || hasThemeFocus) { /* Focus detected - used by keyword matching below */ }
+
+    // Find relevant themes with expanded keyword matching
+    const themeKeywords = {
+      jealousy: ['jealous', 'jealousy', 'envy', 'green-eyed', 'suspicious'],
+      race: ['race', 'racism', 'black', 'moor', 'outsider', 'other'],
+      love_marriage: ['love', 'marriage', 'relationship', 'wife', 'husband'],
+      appearance_reality: ['appearance', 'reality', 'deception', 'honest', 'seem', 'appear', 'truth', 'lie'],
+      reputation_honour: ['reputation', 'honour', 'honor', 'name', 'status'],
+      manipulation: ['manipulation', 'manipulate', 'control', 'deceive', 'trick', 'plot'],
+      women_patriarchy: ['women', 'woman', 'wife', 'patriarchy', 'gender', 'female']
+    };
+
+    Object.entries(THEMES).forEach(([key, theme]) => {
+      const keywords = themeKeywords[key] || [theme.name.toLowerCase()];
+      if (keywords.some(kw => topic.includes(kw))) {
         plan.paragraphs.push({
           focus: theme.name,
-          points: theme.keyPoints.slice(0, 3),
-          quotes: theme.quotes
+          points: theme.keyPoints.slice(0, 4),
+          quotes: theme.quotes,
+          examTip: theme.examTip
         });
         plan.relevantQuotes.push(...theme.quotes);
       }
     });
 
-    // Find relevant characters
-    Object.values(CHARACTERS).forEach(char => {
-      if (topic.includes(char.name.toLowerCase())) {
+    // Find relevant characters with expanded matching
+    const characterKeywords = {
+      othello: ['othello', 'moor', 'hero', 'tragic', 'protagonist', 'general', 'noble'],
+      iago: ['iago', 'villain', 'antagonist', 'evil', 'manipulator', 'ensign'],
+      desdemona: ['desdemona', 'innocent', 'wife', 'victim'],
+      emilia: ['emilia', 'feminist', 'truth'],
+      cassio: ['cassio', 'lieutenant', 'reputation'],
+      brabantio: ['brabantio', 'father'],
+      roderigo: ['roderigo', 'fool', 'dupe'],
+      bianca: ['bianca', 'courtesan']
+    };
+
+    Object.entries(CHARACTERS).forEach(([key, char]) => {
+      const keywords = characterKeywords[key] || [char.name.toLowerCase()];
+      if (keywords.some(kw => topic.includes(kw))) {
         plan.paragraphs.push({
-          focus: char.name,
-          points: [char.arc, ...char.keyTraits.slice(0, 3).map(t => `${char.name} is ${t.toLowerCase()}`)],
-          quotes: char.keyQuotes || []
+          focus: `Character Analysis: ${char.name}`,
+          points: [
+            char.arc,
+            `Key traits: ${char.keyTraits.slice(0, 4).join(', ')}`,
+            char.examFocus,
+            ...Object.entries(char.relationships || {}).slice(0, 2).map(([name, desc]) => `Relationship with ${name}: ${desc}`)
+          ],
+          quotes: char.keyQuotes || [],
+          examTip: char.examFocus
         });
         if (char.keyQuotes) {
           plan.relevantQuotes.push(...char.keyQuotes);
@@ -269,30 +326,131 @@ function OthelloStudyCompanion() {
       }
     });
 
-    // Generic structure if no specific match
+    // Add relevant literary techniques
+    const techniqueKeywords = {
+      'dramatic irony': ['irony', 'ironic', 'audience'],
+      'soliloquy': ['soliloquy', 'speech', 'thoughts', 'alone'],
+      'imagery': ['imagery', 'image', 'symbol', 'metaphor', 'language'],
+      'foreshadowing': ['foreshadow', 'hint', 'predict']
+    };
+
+    LITERARY_TECHNIQUES.forEach(tech => {
+      const keywords = techniqueKeywords[tech.name.toLowerCase()] || [tech.name.toLowerCase()];
+      if (keywords.some(kw => topic.includes(kw)) || plan.paragraphs.length > 0) {
+        plan.techniques.push(tech);
+      }
+    });
+
+    // Generic structure if no specific match found
     if (plan.paragraphs.length === 0) {
-      plan.paragraphs = [
-        { focus: "Introduction and Context", points: ["Define the topic", "Historical/theatrical context", "Thesis statement"], quotes: [] },
-        { focus: "Main Argument 1", points: ["Key evidence", "Character analysis", "Textual support"], quotes: KEY_QUOTES.slice(0, 2) },
-        { focus: "Main Argument 2", points: ["Develop analysis", "Counter-argument", "Further evidence"], quotes: KEY_QUOTES.slice(2, 4) },
-        { focus: "Conclusion", points: ["Synthesise arguments", "Final insight", "Link to question"], quotes: [] }
-      ];
-      plan.relevantQuotes = KEY_QUOTES.slice(0, 6);
+      // Try to identify the main focus from common essay topics
+      if (topic.includes('tragic') || topic.includes('tragedy')) {
+        plan.paragraphs = [
+          { focus: "Othello as Tragic Hero", points: ["Noble beginnings", "Hamartia (fatal flaw)", "Peripeteia (reversal)", "Anagnorisis (recognition)"], quotes: CHARACTERS.othello.keyQuotes.slice(0, 2) },
+          { focus: "The Role of Fate vs Free Will", points: ["Iago's manipulation", "Othello's choices", "Inevitability of tragedy"], quotes: CHARACTERS.iago.keyQuotes.slice(0, 2) },
+          { focus: "Catharsis and Resolution", points: ["Audience response", "Justice served?", "Lessons learned"], quotes: KEY_QUOTES.slice(-3) }
+        ];
+      } else if (topic.includes('downfall') || topic.includes('destruction')) {
+        plan.paragraphs = [
+          { focus: "Seeds of Destruction", points: ["Othello's insecurities", "Iago's motives", "Venetian society"], quotes: KEY_QUOTES.slice(0, 3) },
+          { focus: "The Process of Destruction", points: ["The temptation scene (3.3)", "Erosion of trust", "Loss of identity"], quotes: KEY_QUOTES.slice(3, 6) },
+          { focus: "The Final Catastrophe", points: ["Murder of Desdemona", "Revelation of truth", "Othello's suicide"], quotes: KEY_QUOTES.slice(-4) }
+        ];
+      } else {
+        plan.paragraphs = [
+          { focus: "Context and Setup", points: ["Define key terms from the question", "Establish your argument", "Historical/theatrical context"], quotes: KEY_QUOTES.slice(0, 2) },
+          { focus: "Main Argument with Evidence", points: ["Strongest point supporting your thesis", "Detailed textual analysis", "Link quotes to argument"], quotes: KEY_QUOTES.slice(2, 5) },
+          { focus: "Development and Nuance", points: ["Secondary evidence", "Alternative interpretations", "Dramatic techniques"], quotes: KEY_QUOTES.slice(5, 8) },
+          { focus: "Counter-argument (if applicable)", points: ["Acknowledge opposing view", "Refute or qualify", "Strengthen your position"], quotes: KEY_QUOTES.slice(8, 10) }
+        ];
+      }
+      plan.relevantQuotes = KEY_QUOTES.slice(0, 10);
     }
 
+    // Add counter-argument section for agree/disagree questions
+    if (isAgreeDisagree) {
+      plan.counterArgument = {
+        title: "Counter-Argument Consideration",
+        points: [
+          "Acknowledge the opposing view fairly",
+          "Present evidence that might support the other side",
+          "Explain why your position is still stronger",
+          "Use phrases like 'While it could be argued that...' or 'Some critics suggest...'"
+        ]
+      };
+    }
+
+    // Enhanced introduction with specific guidance
     plan.introduction = [
-      "Open with a hook related to the topic",
-      "Provide brief context for Othello",
-      "State your thesis clearly",
-      "Outline your main arguments"
+      "Hook: Start with a striking quote or provocative statement about the topic",
+      "Context: Brief background on Othello (1603-04, tragedy, Venice/Cyprus)",
+      "Define terms: Clarify any key concepts in the question",
+      "Thesis: State your argument clearly and directly",
+      "Roadmap: Briefly outline your main points (optional but helpful)"
     ];
 
+    // Enhanced conclusion
     plan.conclusion = [
-      "Restate thesis in light of evidence",
-      "Synthesise your main points",
-      "End with broader significance",
-      "Link back to the question"
+      "Restate thesis: Echo your main argument in fresh words",
+      "Synthesise: Show how your points work together",
+      "Broader significance: Connect to Shakespeare's purpose or universal themes",
+      "Final thought: Memorable closing statement or quote",
+      "Answer the question: Ensure you've directly addressed what was asked"
     ];
+
+    // PCLM Marking Criteria guidance
+    plan.markingCriteria = {
+      purpose: [
+        "Clarity of PURPOSE (30%): Is your argument clear and consistent throughout?",
+        "Engage with the question directly - don't just describe, analyse",
+        "Show personal response while remaining academic",
+        "Every paragraph should advance your argument"
+      ],
+      coherence: [
+        "COHERENCE of delivery (30%): Does your essay flow logically?",
+        "Use clear topic sentences at the start of each paragraph",
+        "Link paragraphs with transitions (However, Furthermore, Similarly)",
+        "Build your argument progressively"
+      ],
+      language: [
+        "Efficiency of LANGUAGE (30%): Is your writing precise and sophisticated?",
+        "Use literary terminology correctly (soliloquy, dramatic irony, etc.)",
+        "Vary sentence structure for rhythm",
+        "Integrate quotes smoothly into your sentences"
+      ],
+      mechanics: [
+        "Accuracy of MECHANICS (10%): Is spelling, grammar, punctuation correct?",
+        "Check spelling of character names (Desdemona, Brabantio, Roderigo)",
+        "Use quotation marks correctly for quotes",
+        "Proofread for common errors"
+      ]
+    };
+
+    // Sentence starters for different essay sections
+    plan.sentenceStarters = {
+      introduction: [
+        "Shakespeare's Othello presents...",
+        "In exploring the question of...",
+        "The tragedy of Othello fundamentally concerns...",
+        "At the heart of this play lies..."
+      ],
+      body: [
+        "This is evident when...",
+        "Shakespeare demonstrates this through...",
+        "The significance of this becomes clear in...",
+        "Crucially, this moment reveals...",
+        "Furthermore, the use of [technique] emphasises...",
+        "The juxtaposition of... and... highlights...",
+        "It could be argued that... however...",
+        "This interpretation is supported by..."
+      ],
+      conclusion: [
+        "Ultimately, Shakespeare's Othello...",
+        "In conclusion, the evidence suggests...",
+        "The tragedy's enduring power lies in...",
+        "Thus, we can see that..."
+      ]
+    };
 
     setEssayPlan(plan);
   };
@@ -620,7 +778,7 @@ function OthelloStudyCompanion() {
                 <div className="card">
                   <h3 className="card-title">Enter Your Essay Question</h3>
                   <p className="card-text" style={{marginBottom: '1rem'}}>
-                    Paste a past paper question or write your own topic to generate a structured essay plan with relevant quotes.
+                    Paste a past paper question or write your own topic to generate a structured essay plan with PCLM guidance, relevant quotes, and sentence starters.
                   </p>
                   <textarea
                     className="essay-textarea"
@@ -632,28 +790,78 @@ function OthelloStudyCompanion() {
                     Generate Essay Plan
                   </button>
                 </div>
+
+                {/* PCLM Marking Criteria - Always visible as guide */}
+                <div className="card" style={{marginTop: '1rem'}}>
+                  <h3 className="card-title">PCLM Marking Scheme</h3>
+                  <p className="card-text" style={{marginBottom: '1rem', fontSize: '0.9rem'}}>
+                    LC Single Text essays are marked on these criteria:
+                  </p>
+                  <div className="pclm-grid">
+                    <div className="pclm-item">
+                      <span className="pclm-label">P</span>
+                      <span className="pclm-text">Purpose (30%)</span>
+                    </div>
+                    <div className="pclm-item">
+                      <span className="pclm-label">C</span>
+                      <span className="pclm-text">Coherence (30%)</span>
+                    </div>
+                    <div className="pclm-item">
+                      <span className="pclm-label">L</span>
+                      <span className="pclm-text">Language (30%)</span>
+                    </div>
+                    <div className="pclm-item">
+                      <span className="pclm-label">M</span>
+                      <span className="pclm-text">Mechanics (10%)</span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="essay-output">
                 {essayPlan ? (
                   <div className="essay-plan">
+                    {/* Word Count Target */}
+                    <div className="card word-count-card">
+                      <div className="word-count-info">
+                        <span className="word-count-label">Target Word Count:</span>
+                        <span className="word-count-value">{essayPlan.wordCount.min} - {essayPlan.wordCount.max} words</span>
+                      </div>
+                    </div>
+
+                    {/* Main Essay Structure */}
                     <div className="card">
                       <h3 className="card-title">Essay Plan: {essayPlan.topic}</h3>
 
+                      {/* Introduction */}
                       <div className="plan-section">
                         <h4 className="plan-section-title">Introduction</h4>
                         {essayPlan.introduction.map((point, i) => (
                           <div key={i} className="plan-item">{point}</div>
                         ))}
+                        {essayPlan.sentenceStarters?.introduction && (
+                          <div className="sentence-starters">
+                            <div className="starters-title">Sentence Starters:</div>
+                            {essayPlan.sentenceStarters.introduction.map((starter, i) => (
+                              <div key={i} className="starter-item">"{starter}"</div>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
+                      {/* Body Paragraphs */}
                       {essayPlan.paragraphs.map((para, i) => (
                         <div key={i} className="plan-section">
                           <h4 className="plan-section-title">Paragraph {i + 1}: {para.focus}</h4>
                           {para.points.map((point, j) => (
                             <div key={j} className="plan-item">{point}</div>
                           ))}
-                          {para.quotes.length > 0 && (
+                          {para.examTip && (
+                            <div className="exam-tip-inline">
+                              <strong>Exam Tip:</strong> {para.examTip}
+                            </div>
+                          )}
+                          {para.quotes && para.quotes.length > 0 && (
                             <div className="analysis-box" style={{marginTop: '0.75rem'}}>
                               <div className="analysis-title">Suggested Quotes</div>
                               {para.quotes.slice(0, 2).map((q, k) => (
@@ -666,14 +874,95 @@ function OthelloStudyCompanion() {
                         </div>
                       ))}
 
+                      {/* Counter-Argument Section */}
+                      {essayPlan.counterArgument && (
+                        <div className="plan-section counter-argument-section">
+                          <h4 className="plan-section-title">{essayPlan.counterArgument.title}</h4>
+                          {essayPlan.counterArgument.points.map((point, i) => (
+                            <div key={i} className="plan-item">{point}</div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Conclusion */}
                       <div className="plan-section">
                         <h4 className="plan-section-title">Conclusion</h4>
                         {essayPlan.conclusion.map((point, i) => (
                           <div key={i} className="plan-item">{point}</div>
                         ))}
+                        {essayPlan.sentenceStarters?.conclusion && (
+                          <div className="sentence-starters">
+                            <div className="starters-title">Sentence Starters:</div>
+                            {essayPlan.sentenceStarters.conclusion.map((starter, i) => (
+                              <div key={i} className="starter-item">"{starter}"</div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
 
+                    {/* Body Paragraph Sentence Starters */}
+                    {essayPlan.sentenceStarters?.body && (
+                      <div className="card">
+                        <h3 className="card-title">Body Paragraph Sentence Starters</h3>
+                        <div className="starters-grid">
+                          {essayPlan.sentenceStarters.body.map((starter, i) => (
+                            <div key={i} className="starter-chip">"{starter}"</div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* PCLM Guidance */}
+                    {essayPlan.markingCriteria && (
+                      <div className="card">
+                        <h3 className="card-title">PCLM Checklist</h3>
+                        <div className="pclm-checklist">
+                          <div className="pclm-criteria">
+                            <h4 className="criteria-title"><span className="pclm-badge">P</span> Purpose (30%)</h4>
+                            {essayPlan.markingCriteria.purpose.map((point, i) => (
+                              <div key={i} className="criteria-point">{point}</div>
+                            ))}
+                          </div>
+                          <div className="pclm-criteria">
+                            <h4 className="criteria-title"><span className="pclm-badge">C</span> Coherence (30%)</h4>
+                            {essayPlan.markingCriteria.coherence.map((point, i) => (
+                              <div key={i} className="criteria-point">{point}</div>
+                            ))}
+                          </div>
+                          <div className="pclm-criteria">
+                            <h4 className="criteria-title"><span className="pclm-badge">L</span> Language (30%)</h4>
+                            {essayPlan.markingCriteria.language.map((point, i) => (
+                              <div key={i} className="criteria-point">{point}</div>
+                            ))}
+                          </div>
+                          <div className="pclm-criteria">
+                            <h4 className="criteria-title"><span className="pclm-badge">M</span> Mechanics (10%)</h4>
+                            {essayPlan.markingCriteria.mechanics.map((point, i) => (
+                              <div key={i} className="criteria-point">{point}</div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Literary Techniques */}
+                    {essayPlan.techniques && essayPlan.techniques.length > 0 && (
+                      <div className="card">
+                        <h3 className="card-title">Relevant Literary Techniques</h3>
+                        {essayPlan.techniques.slice(0, 4).map((tech, i) => (
+                          <div key={i} className="technique-mini">
+                            <div className="technique-mini-name">{tech.name}</div>
+                            <div className="technique-mini-def">{tech.definition}</div>
+                            <div className="technique-mini-example">
+                              Example: {tech.examples[0]}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* All Relevant Quotes */}
                     <div className="card">
                       <h3 className="card-title">All Relevant Quotes</h3>
                       {essayPlan.relevantQuotes.slice(0, 8).map((q, i) => (
@@ -690,6 +979,9 @@ function OthelloStudyCompanion() {
                   <div className="empty-state">
                     <div className="empty-icon">✍️</div>
                     <p>Enter an essay question to generate a structured plan</p>
+                    <p style={{fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.7}}>
+                      Include character names, themes, or keywords for best results
+                    </p>
                   </div>
                 )}
               </div>

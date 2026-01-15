@@ -934,6 +934,27 @@
   color: rgba(232, 228, 224, 0.75);
 }
 
+/* ============================================ */
+/* COMPREHENSIVE MOBILE RESPONSIVENESS */
+/* ============================================ */
+
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+  .essay-planner {
+    grid-template-columns: 1fr;
+  }
+
+  .essay-input-section {
+    position: relative;
+    top: 0;
+  }
+
+  .overview-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile breakpoint */
 @media (max-width: 768px) {
   .header {
     padding: 1rem;
@@ -964,10 +985,375 @@
 
   .modal-content {
     padding: 1.5rem;
+    margin: 1rem;
+    max-height: 85vh;
   }
 
   .side-by-side {
     grid-template-columns: 1fr !important;
+  }
+
+  /* Navigation tabs - horizontal scroll with better touch targets */
+  .nav-tabs {
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-tab {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    min-width: fit-content;
+  }
+
+  .nav-tab span:first-child {
+    font-size: 1rem;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  /* Cards */
+  .card {
+    padding: 1.25rem;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+  }
+
+  /* Quote cards */
+  .quote-text {
+    font-size: 1rem;
+  }
+
+  .quote-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bookmark-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  /* Overview stats */
+  .overview-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+
+  /* Scene navigation */
+  .scene-nav {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+  }
+
+  .act-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  /* Text excerpts */
+  .text-excerpt {
+    padding: 1rem;
+  }
+
+  .excerpt-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .excerpt-speaker {
+    font-size: 1rem;
+  }
+
+  /* Quiz section */
+  .quiz-question {
+    font-size: 1.2rem;
+  }
+
+  .quiz-buttons {
+    flex-direction: column;
+  }
+
+  .quiz-btn {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .start-quiz-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+
+  /* Essay planner */
+  .essay-textarea {
+    min-height: 120px;
+  }
+
+  .generate-btn {
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+
+  /* Exam cards */
+  .exam-year {
+    position: relative;
+    top: auto;
+    right: auto;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  .exam-question {
+    font-size: 1rem;
+  }
+
+  /* Context grid */
+  .context-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Technique cards */
+  .technique-name {
+    font-size: 1.1rem;
+  }
+
+  /* Search results dropdown */
+  .search-results {
+    max-height: 300px;
+  }
+}
+
+/* Small mobile breakpoint */
+@media (max-width: 480px) {
+  .header {
+    padding: 0.75rem;
+  }
+
+  .main-title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .main-content {
+    padding: 0.75rem;
+  }
+
+  /* Hide text labels on very small screens, show only icons */
+  .nav-tab span:last-child {
+    display: none;
+  }
+
+  .nav-tab {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .nav-tab span:first-child {
+    font-size: 1.2rem;
+  }
+
+  /* Cards */
+  .card {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  /* Section title */
+  .section-title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Overview stats - single column on very small screens */
+  .overview-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Traits */
+  .traits-list {
+    gap: 0.35rem;
+  }
+
+  .trait-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  /* Quote cards */
+  .quote-card {
+    padding-left: 0.75rem;
+  }
+
+  .quote-text {
+    font-size: 0.95rem;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  /* Scene card */
+  .scene-setting {
+    font-size: 0.85rem;
+  }
+
+  .moment-item {
+    font-size: 0.85rem;
+  }
+
+  /* Toggle buttons */
+  .summary-toggle {
+    flex-wrap: wrap;
+  }
+
+  .toggle-btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  /* Analysis box */
+  .analysis-box {
+    padding: 0.75rem;
+  }
+
+  /* Progress bar in quiz */
+  .quiz-progress {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .progress-bar {
+    width: 100%;
+    order: 3;
+    margin: 0.5rem 0 0 0;
+  }
+
+  /* Essay planner specific */
+  .plan-section-title {
+    font-size: 1.05rem;
+  }
+
+  .plan-item {
+    font-size: 0.9rem;
+    padding: 0.4rem 0;
+    padding-left: 0.75rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .nav-tab {
+    min-height: 44px;
+  }
+
+  .toggle-btn {
+    min-height: 40px;
+  }
+
+  .act-btn {
+    min-height: 44px;
+  }
+
+  .bookmark-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .quiz-btn {
+    min-height: 48px;
+  }
+
+  /* Remove hover effects that don't work well on touch */
+  .card:hover {
+    transform: none;
+  }
+
+  .generate-btn:hover {
+    transform: none;
+  }
+
+  .quiz-btn:hover {
+    transform: none;
+  }
+
+  .start-quiz-btn:hover {
+    transform: none;
+  }
+}
+
+/* Safe area insets for devices with notches */
+@supports (padding: max(0px)) {
+  .header {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .main-content {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .header {
+    padding: 0.5rem 1rem;
+  }
+
+  .main-title {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  .nav-tabs {
+    padding: 0.25rem 0;
+  }
+
+  .nav-tab {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .modal-content {
+    max-height: 80vh;
   }
 }
 
@@ -1114,4 +1500,242 @@
 
 .excerpt-significance strong {
   color: #d4af37;
+}
+
+/* ============================================ */
+/* ENHANCED ESSAY PLANNER STYLES */
+/* ============================================ */
+
+/* PCLM Grid in input section */
+.pclm-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.pclm-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.pclm-label {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #d4af37, #8b5a2b);
+  border-radius: 50%;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #1a1614;
+}
+
+.pclm-text {
+  font-size: 0.85rem;
+  color: rgba(232, 228, 224, 0.85);
+}
+
+/* Word Count Card */
+.word-count-card {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 90, 43, 0.15) 100%);
+  border-color: rgba(212, 175, 55, 0.3);
+  padding: 1rem 1.5rem;
+}
+
+.word-count-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.word-count-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  color: rgba(232, 228, 224, 0.8);
+}
+
+.word-count-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #d4af37;
+}
+
+/* Sentence Starters */
+.sentence-starters {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(70, 130, 180, 0.1);
+  border-radius: 8px;
+  border-left: 3px solid rgba(70, 130, 180, 0.4);
+}
+
+.starters-title {
+  font-size: 0.8rem;
+  color: rgba(100, 149, 237, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.starter-item {
+  padding: 0.3rem 0;
+  font-size: 0.9rem;
+  color: rgba(232, 228, 224, 0.8);
+  font-style: italic;
+}
+
+.starters-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.starter-chip {
+  padding: 0.5rem 0.75rem;
+  background: rgba(70, 130, 180, 0.15);
+  border: 1px solid rgba(70, 130, 180, 0.3);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(232, 228, 224, 0.85);
+}
+
+/* Counter-Argument Section */
+.counter-argument-section {
+  background: rgba(255, 152, 0, 0.08);
+  padding: 1.25rem;
+  border-radius: 8px;
+  border-left: 3px solid rgba(255, 152, 0, 0.5);
+  margin: 1.5rem 0;
+}
+
+.counter-argument-section .plan-section-title {
+  color: #ffb74d;
+}
+
+.counter-argument-section .plan-item {
+  border-left-color: rgba(255, 152, 0, 0.4);
+}
+
+/* Exam Tip Inline */
+.exam-tip-inline {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: rgba(232, 228, 224, 0.8);
+}
+
+.exam-tip-inline strong {
+  color: #d4af37;
+}
+
+/* PCLM Checklist */
+.pclm-checklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.pclm-criteria {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.criteria-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: rgba(232, 228, 224, 0.9);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pclm-badge {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #d4af37, #8b5a2b);
+  border-radius: 50%;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #1a1614;
+}
+
+.criteria-point {
+  padding: 0.4rem 0;
+  padding-left: 0.75rem;
+  border-left: 2px solid rgba(212, 175, 55, 0.3);
+  font-size: 0.85rem;
+  color: rgba(232, 228, 224, 0.75);
+  margin-bottom: 0.25rem;
+}
+
+/* Technique Mini Card */
+.technique-mini {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  border-left: 3px solid rgba(139, 90, 43, 0.5);
+}
+
+.technique-mini-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #d4af37;
+  margin-bottom: 0.25rem;
+}
+
+.technique-mini-def {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: rgba(232, 228, 224, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.technique-mini-example {
+  font-size: 0.85rem;
+  color: rgba(232, 228, 224, 0.6);
+  padding-left: 0.75rem;
+  border-left: 2px solid rgba(139, 90, 43, 0.3);
+}
+
+/* Mobile Responsiveness for Essay Planner */
+@media (max-width: 768px) {
+  .pclm-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pclm-checklist {
+    grid-template-columns: 1fr;
+  }
+
+  .word-count-info {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .starters-grid {
+    flex-direction: column;
+  }
+
+  .starter-chip {
+    text-align: center;
+  }
 }

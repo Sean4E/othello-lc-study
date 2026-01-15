@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d2520"/>
+      <stop offset="100%" style="stop-color:#1a1614"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f4d03f"/>
+      <stop offset="100%" style="stop-color:#d4af37"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative border -->
+  <rect x="20" y="20" width="1160" height="590" rx="20" fill="none" stroke="url(#gold)" stroke-width="3" opacity="0.3"/>
+
+  <!-- Large O on the left -->
+  <text x="250" y="400" font-family="Georgia, 'Times New Roman', serif" font-size="350" font-weight="bold" fill="url(#gold)" text-anchor="middle" filter="url(#shadow)" opacity="0.9">O</text>
+
+  <!-- Title text -->
+  <text x="700" y="250" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="bold" fill="url(#gold)" text-anchor="middle">Othello</text>
+
+  <!-- Subtitle -->
+  <text x="700" y="330" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#e8e4e0" text-anchor="middle" opacity="0.9">Leaving Certificate Study Companion</text>
+
+  <!-- Decorative line -->
+  <line x1="500" y1="370" x2="900" y2="370" stroke="url(#gold)" stroke-width="2" opacity="0.5"/>
+
+  <!-- Features -->
+  <text x="700" y="430" font-family="'Source Sans Pro', Arial, sans-serif" font-size="24" fill="#e8e4e0" text-anchor="middle" opacity="0.8">Characters • Themes • Quotes • Essay Planner</text>
+  <text x="700" y="470" font-family="'Source Sans Pro', Arial, sans-serif" font-size="24" fill="#e8e4e0" text-anchor="middle" opacity="0.8">Full Play Text with Modern Translations</text>
+
+  <!-- Bottom accent -->
+  <text x="700" y="550" font-family="Georgia, 'Times New Roman', serif" font-size="20" fill="url(#gold)" text-anchor="middle" opacity="0.7">Complete LC English Study Resource</text>
+
+  <!-- Small decorative elements -->
+  <circle cx="100" cy="315" r="6" fill="url(#gold)" opacity="0.4"/>
+  <circle cx="1100" cy="315" r="6" fill="url(#gold)" opacity="0.4"/>
+</svg>
