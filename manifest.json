@@ -1,0 +1,51 @@
+{
+  "name": "Othello - Leaving Certificate Study Companion",
+  "short_name": "Othello Study",
+  "description": "Complete study companion for Shakespeare's Othello - Leaving Certificate English",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1a1614",
+  "theme_color": "#2d2520",
+  "orientation": "any",
+  "scope": "./",
+  "lang": "en",
+  "categories": ["education", "books"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Key Quotes",
+      "short_name": "Quotes",
+      "description": "View key quotes from Othello",
+      "url": "./?tab=quotes",
+      "icons": [{"src": "icon.svg", "sizes": "96x96"}]
+    },
+    {
+      "name": "Characters",
+      "short_name": "Characters",
+      "description": "Character analysis",
+      "url": "./?tab=characters",
+      "icons": [{"src": "icon.svg", "sizes": "96x96"}]
+    },
+    {
+      "name": "Essay Planner",
+      "short_name": "Essays",
+      "description": "Plan your essays",
+      "url": "./?tab=essay",
+      "icons": [{"src": "icon.svg", "sizes": "96x96"}]
+    }
+  ]
+}

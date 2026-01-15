@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Icon Generator for Othello PWA</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #1a1614; color: #e8e4e0; }
+    .icon-container { display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0; }
+    .icon-box { text-align: center; }
+    canvas { border: 1px solid #d4af37; background: #2d2520; }
+    button { background: #d4af37; color: #1a1614; border: none; padding: 10px 20px; cursor: pointer; margin: 5px; font-size: 14px; }
+    button:hover { background: #f4d03f; }
+    h1 { color: #d4af37; }
+    .instructions { background: rgba(212,175,55,0.1); padding: 15px; border-radius: 8px; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <h1>Othello PWA Icon Generator</h1>
+
+  <div class="instructions">
+    <h3>Instructions:</h3>
+    <ol>
+      <li>Click "Generate All Icons" to create all icon sizes</li>
+      <li>Right-click each icon and "Save image as..." to download</li>
+      <li>Save them in the /icons folder with the correct filenames</li>
+    </ol>
+  </div>
+
+  <button onclick="generateAllIcons()">Generate All Icons</button>
+  <button onclick="downloadAll()">Download All (opens save dialogs)</button>
+
+  <div class="icon-container" id="icons"></div>
+
+  <script>
+    const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+
+    function drawIcon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      canvas.width = size;
+      canvas.height = size;
+
+      // Background gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, size, size);
+      bgGrad.addColorStop(0, '#2d2520');
+      bgGrad.addColorStop(1, '#1a1614');
+
+      // Gold gradient
+      const goldGrad = ctx.createLinearGradient(0, 0, size, size);
+      goldGrad.addColorStop(0, '#f4d03f');
+      goldGrad.addColorStop(1, '#d4af37');
+
+      // Draw rounded rectangle background
+      const radius = size * 0.15;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, radius);
+      ctx.fillStyle = bgGrad;
+      ctx.fill();
+
+      // Draw border
+      ctx.beginPath();
+      ctx.roundRect(size * 0.04, size * 0.04, size * 0.92, size * 0.92, radius * 0.8);
+      ctx.strokeStyle = goldGrad;
+      ctx.lineWidth = size * 0.008;
+      ctx.globalAlpha = 0.3;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // Draw "O" letter
+      ctx.fillStyle = goldGrad;
+      ctx.font = `bold ${size * 0.55}px Georgia, "Times New Roman", serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Add shadow
+      ctx.shadowColor = 'rgba(0,0,0,0.3)';
+      ctx.shadowBlur = size * 0.03;
+      ctx.shadowOffsetY = size * 0.015;
+
+      ctx.fillText('O', size / 2, size / 2 + size * 0.03);
+
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetY = 0;
+
+      // Draw quill decoration at top
+      ctx.globalAlpha = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(size / 2, size * 0.08);
+      ctx.lineTo(size / 2 - size * 0.02, size * 0.16);
+      ctx.lineTo(size / 2, size * 0.14);
+      ctx.lineTo(size / 2 + size * 0.02, size * 0.16);
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw small decorative circles
+      ctx.globalAlpha = 0.4;
+      ctx.beginPath();
+      ctx.arc(size * 0.23, size / 2, size * 0.015, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(size * 0.77, size / 2, size * 0.015, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    function generateAllIcons() {
+      const container = document.getElementById('icons');
+      container.innerHTML = '';
+
+      sizes.forEach(size => {
+        const box = document.createElement('div');
+        box.className = 'icon-box';
+
+        const canvas = document.createElement('canvas');
+        canvas.id = `icon-${size}`;
+        drawIcon(canvas, size);
+
+        const label = document.createElement('p');
+        label.textContent = `icon-${size}x${size}.png`;
+
+        const btn = document.createElement('button');
+        btn.textContent = 'Download';
+        btn.onclick = () => downloadIcon(canvas, size);
+
+        box.appendChild(canvas);
+        box.appendChild(label);
+        box.appendChild(btn);
+        container.appendChild(box);
+      });
+
+      // Also generate favicon (32x32)
+      const faviconBox = document.createElement('div');
+      faviconBox.className = 'icon-box';
+      const faviconCanvas = document.createElement('canvas');
+      faviconCanvas.id = 'favicon';
+      drawIcon(faviconCanvas, 32);
+      const faviconLabel = document.createElement('p');
+      faviconLabel.textContent = 'favicon-32x32.png';
+      const faviconBtn = document.createElement('button');
+      faviconBtn.textContent = 'Download';
+      faviconBtn.onclick = () => downloadIcon(faviconCanvas, 32, 'favicon-32x32.png');
+      faviconBox.appendChild(faviconCanvas);
+      faviconBox.appendChild(faviconLabel);
+      faviconBox.appendChild(faviconBtn);
+      container.appendChild(faviconBox);
+
+      // 16x16 favicon
+      const favicon16Box = document.createElement('div');
+      favicon16Box.className = 'icon-box';
+      const favicon16Canvas = document.createElement('canvas');
+      favicon16Canvas.id = 'favicon16';
+      drawIcon(favicon16Canvas, 16);
+      const favicon16Label = document.createElement('p');
+      favicon16Label.textContent = 'favicon-16x16.png';
+      const favicon16Btn = document.createElement('button');
+      favicon16Btn.textContent = 'Download';
+      favicon16Btn.onclick = () => downloadIcon(favicon16Canvas, 16, 'favicon-16x16.png');
+      favicon16Box.appendChild(favicon16Canvas);
+      favicon16Box.appendChild(favicon16Label);
+      favicon16Box.appendChild(favicon16Btn);
+      container.appendChild(favicon16Box);
+
+      // Apple touch icon (180x180)
+      const appleBox = document.createElement('div');
+      appleBox.className = 'icon-box';
+      const appleCanvas = document.createElement('canvas');
+      appleCanvas.id = 'apple-touch';
+      drawIcon(appleCanvas, 180);
+      const appleLabel = document.createElement('p');
+      appleLabel.textContent = 'apple-touch-icon.png';
+      const appleBtn = document.createElement('button');
+      appleBtn.textContent = 'Download';
+      appleBtn.onclick = () => downloadIcon(appleCanvas, 180, 'apple-touch-icon.png');
+      appleBox.appendChild(appleCanvas);
+      appleBox.appendChild(appleLabel);
+      appleBox.appendChild(appleBtn);
+      container.appendChild(appleBox);
+    }
+
+    function downloadIcon(canvas, size, filename) {
+      const link = document.createElement('a');
+      link.download = filename || `icon-${size}x${size}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function downloadAll() {
+      sizes.forEach(size => {
+        const canvas = document.getElementById(`icon-${size}`);
+        if (canvas) downloadIcon(canvas, size);
+      });
+      // Favicons
+      const favicon = document.getElementById('favicon');
+      if (favicon) downloadIcon(favicon, 32, 'favicon-32x32.png');
+      const favicon16 = document.getElementById('favicon16');
+      if (favicon16) downloadIcon(favicon16, 16, 'favicon-16x16.png');
+      const apple = document.getElementById('apple-touch');
+      if (apple) downloadIcon(apple, 180, 'apple-touch-icon.png');
+    }
+
+    // Auto-generate on load
+    window.onload = generateAllIcons;
+  </script>
+</body>
+</html>
